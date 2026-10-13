@@ -1,0 +1,17 @@
+<!-- @dsCard group="Spacing" viewport="700x180" name="Corner radius" subtitle="Soft geometry — badge 6 · input 8 · button 10 · card 14" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><link rel="stylesheet" href="../styles.css"/>
+<style>
+  body{margin:0;padding:20px;background:var(--background);font-family:var(--font-sans)}
+  .row{display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap}
+  .cell{display:flex;flex-direction:column;gap:8px;align-items:center}
+  .box{width:72px;height:56px;background:var(--muted);border:1px solid var(--border)}
+  .t{font-family:var(--font-mono);font-size:10px;color:var(--muted-foreground);text-align:center}
+</style></head>
+<body>
+<div class="row" id="g"></div>
+<script>
+const items=[["sm / badge","6px"],["md / input","8px"],["lg / button","10px"],["xl / card","14px"],["2xl","18px"],["3xl","22px"],["4xl","26px"],["full","999px"]];
+document.getElementById("g").innerHTML=items.map(([n,v])=>`<div class="cell"><div class="box" style="border-radius:${v}"></div><div class="t">${n}<br>${v}</div></div>`).join("");
+</script>
+</body></html>

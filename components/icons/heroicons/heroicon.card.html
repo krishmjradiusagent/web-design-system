@@ -1,0 +1,23 @@
+<!-- @dsCard group="Components" viewport="520x280" name="HeroIcon — Heroicons v1 registry" subtitle="Heroicons v1 icon set, materialized from the .fig" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:24px;background:var(--background);font-family:var(--font-sans)}.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}.cell{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px;border:1px solid var(--border);border-radius:10px;color:var(--foreground)}.cell small{font-size:10px;font-family:var(--font-mono);color:var(--muted-foreground);text-align:center;word-break:break-word}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { HeroIcon } = window.RadiusUIDesignSystem_c7220b;
+const names = ["MediaIconUnfilledUserGroup","MediaIconUnfilledPresentationChart","MediaIconUnfilledBuildingStorefront","MediaIconUnfilledCollection","MediaIconUnfilledGift","MediaIconFilledRss","MediaIconUnfilledUsers","MediaIconUnfilledSpeakerphone","MediaIconUnfilledBellAlert","MediaIconUnfilledCog8"];
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <div className="grid">{names.map(n => <div key={n} className="cell"><HeroIcon name={n} size={22} /><small>{n.replace(/^MediaIcon(Un)?Filled/,"")}</small></div>)}</div>
+);
+</script>
+</body>
+</html>

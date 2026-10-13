@@ -1,0 +1,19 @@
+<!-- @dsCard group="Colors" viewport="700x180" name="Semantic roles" subtitle="Surfaces, text, primary & destructive — 1:1 with the source theme" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><link rel="stylesheet" href="../styles.css"/>
+<style>
+  body{margin:0;padding:16px;background:var(--background);font-family:var(--font-sans)}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .chip{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden}
+  .chip .fill{height:52px}
+  .chip .meta{padding:6px 8px}
+  .chip .name{font-size:12px;font-weight:600;color:var(--foreground)}
+  .chip .tok{font-family:var(--font-mono);font-size:10px;color:var(--muted-foreground)}
+</style></head>
+<body>
+<div class="grid" id="g"></div>
+<script>
+const items=[["Primary","--primary","#5a5ff2"],["Primary fg","--primary-foreground","#ffffff"],["Secondary","--secondary","#f5f5f5"],["Destructive","--destructive","#dc2626"],["Background","--background","#ffffff"],["Foreground","--foreground","#0a0a0a"],["Muted","--muted","#f5f5f5"],["Muted fg","--muted-foreground","#737373"],["Border","--border","#e5e5e5"],["Ring","--ring","#a3a3a3"],["Accent","--accent","#f5f5f5"],["Card","--card","#ffffff"]];
+document.getElementById("g").innerHTML=items.map(([n,t,v])=>`<div class="chip"><div class="fill" style="background:var(${t})"></div><div class="meta"><div class="name">${n}</div><div class="tok">${t}</div></div></div>`).join("");
+</script>
+</body></html>

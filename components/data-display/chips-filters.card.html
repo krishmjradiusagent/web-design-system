@@ -1,0 +1,63 @@
+<!-- @dsCard group="Components" viewport="900x520" name="Chip · Filters · DotIndicator · StatIndicator" subtitle="Small tags, filter toolbar, sequence dots, trend indicators" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:24px;background:var(--background);font-family:var(--font-sans)}.grid{display:flex;flex-direction:column;gap:20px}.lbl{font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--muted-foreground);text-transform:uppercase;margin-bottom:8px}.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Chip, Filters, DotIndicator, StatIndicator } = window.RadiusUIDesignSystem_c7220b;
+function Demo(){
+  const [dot,setDot]=React.useState(1);
+  return (
+    <div className="grid">
+      <div><div className="lbl">Chip — soft</div>
+        <div className="row">
+          <Chip color="neutral">Neutral</Chip><Chip color="blue">Buyer</Chip><Chip color="green">Closed</Chip>
+          <Chip color="yellow">Pending</Chip><Chip color="orange">Attention</Chip><Chip color="red">Overdue</Chip>
+          <Chip color="indigo">Mel</Chip><Chip color="blue" onRemove={()=>{}}>Removable</Chip>
+        </div>
+      </div>
+      <div><div className="lbl">Chip — solid / outline</div>
+        <div className="row">
+          <Chip variant="solid" color="neutral">Primary</Chip><Chip variant="solid" color="green">Closed</Chip>
+          <Chip variant="solid" color="indigo">Mel</Chip><Chip variant="outline">Outline</Chip>
+        </div>
+      </div>
+      <div><div className="lbl">Filters</div>
+        <Filters onAdd={()=>{}} onClear={()=>{}}
+          filters={[
+            {label:"Side",value:"Buyer",onRemove:()=>{}},
+            {label:"Stage",value:"Under contract",onRemove:()=>{}},
+            {label:"Close",value:"Next 30 days",onRemove:()=>{}},
+          ]} />
+      </div>
+      <div><div className="lbl">Dot indicator</div>
+        <div className="row" style={{gap:24}}>
+          <DotIndicator count={5} active={dot} onSelect={setDot}/>
+          <DotIndicator count={4} active={0} size="lg"/>
+          <DotIndicator count={6} active={3} size="sm"/>
+        </div>
+      </div>
+      <div><div className="lbl">Stat indicator</div>
+        <div className="row" style={{gap:16}}>
+          <StatIndicator value="+12.4%" trend="up"/>
+          <StatIndicator value="−3.1%" trend="down"/>
+          <StatIndicator value="0.0%" trend="flat"/>
+          <StatIndicator value="+2.8%" trend="up" size="sm"/>
+        </div>
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body>
+</html>

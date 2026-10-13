@@ -1,0 +1,19 @@
+<!-- @dsCard group="Colors" viewport="700x140" name="Status" subtitle="Dialed-down status hues — no neon" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><link rel="stylesheet" href="../styles.css"/>
+<style>
+  body{margin:0;padding:16px;background:var(--background);font-family:var(--font-sans)}
+  .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .chip{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden}
+  .fill{height:56px}
+  .meta{padding:6px 8px}
+  .name{font-size:12px;font-weight:600}
+  .tok{font-family:var(--font-mono);font-size:10px;color:var(--muted-foreground)}
+</style></head>
+<body>
+<div class="grid" id="g"></div>
+<script>
+const items=[["Blue","#2563eb"],["Green","#6da544"],["Yellow","#ffda44"],["Orange","#ea580c"],["Red","#dc2626"]];
+document.getElementById("g").innerHTML=items.map(([n,v])=>`<div class="chip"><div class="fill" style="background:${v}"></div><div class="meta"><div class="name">${n}</div><div class="tok">${v}</div></div></div>`).join("");
+</script>
+</body></html>

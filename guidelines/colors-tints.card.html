@@ -1,0 +1,18 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Badge tints" subtitle="Pale bg + dark fg, same hue" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><link rel="stylesheet" href="../styles.css"/>
+<style>
+  body{margin:0;padding:16px;background:var(--background);font-family:var(--font-sans)}
+  .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .cell{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:500}
+  .pill::before{content:"";width:6px;height:6px;border-radius:999px;background:currentColor}
+  .tok{font-family:var(--font-mono);font-size:10px;color:var(--muted-foreground)}
+</style></head>
+<body>
+<div class="grid" id="g"></div>
+<script>
+const items=[["Green","#dcfce7","#166534"],["Blue","#dbeafe","#1d4ed8"],["Amber","#fef9c3","#854d0e"],["Red","#fee2e2","#991b1b"],["Indigo","#e0e7ff","#3730a3"]];
+document.getElementById("g").innerHTML=items.map(([n,bg,fg])=>`<div class="cell"><span class="pill" style="background:${bg};color:${fg}">${n}</span><span class="tok">${bg}</span><span class="tok">${fg}</span></div>`).join("");
+</script>
+</body></html>

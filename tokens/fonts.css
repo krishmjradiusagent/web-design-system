@@ -1,0 +1,45 @@
+/* Radius UI — Webfonts
+   Mona Sans = product UI + body. Hubot Sans = headings, display, pull-out text.
+   Both self-hosted (assets/fonts) with a CDN src as a second fallback only —
+   if the local file is missing the browser falls through, so fonts never vanish.
+   No mono family: numbers use Mona Sans tabular figures. */
+
+/* Mona Sans — variable (wght 200–900, wdth 75–125, opsz, ital) */
+@font-face {
+  font-family: "Mona Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  src: url("../assets/fonts/MonaSans-VF.ttf") format("truetype-variations"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/mona-sans:vf@latest/latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Mona Sans";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  src: url("../assets/fonts/MonaSans-VF.ttf") format("truetype-variations"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/mona-sans:vf@latest/latin-wght-italic.woff2") format("woff2-variations");
+}
+
+/* Hubot Sans — variable (wght 200–900, wdth 75–125, slnt). Headings + display. */
+@font-face {
+  font-family: "Hubot Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  src: url("../assets/fonts/HubotSans-VF.woff2") format("woff2-variations"),
+       url("https://cdn.jsdelivr.net/fontsource/fonts/hubot-sans:vf@latest/latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Hubot Sans";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  src: url("https://cdn.jsdelivr.net/fontsource/fonts/hubot-sans:vf@latest/latin-wght-italic.woff2") format("woff2-variations");
+}
+

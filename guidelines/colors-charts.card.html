@@ -1,0 +1,17 @@
+<!-- @dsCard group="Colors" viewport="700x130" name="Chart palette" subtitle="Categorical series (light mode)" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><link rel="stylesheet" href="../styles.css"/>
+<style>
+  body{margin:0;padding:16px;background:var(--background);font-family:var(--font-sans)}
+  .row{display:flex;gap:10px}
+  .chip{flex:1;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden}
+  .fill{height:52px}
+  .meta{padding:5px 8px;font-family:var(--font-mono);font-size:10px;color:var(--muted-foreground)}
+</style></head>
+<body>
+<div class="row" id="g"></div>
+<script>
+const items=[["chart-1","#ea580c"],["chart-2","#0d9488"],["chart-3","#164e63"],["chart-4","#fbbf24"],["chart-5","#f59e0b"]];
+document.getElementById("g").innerHTML=items.map(([n,v])=>`<div class="chip"><div class="fill" style="background:${v}"></div><div class="meta">${n} · ${v}</div></div>`).join("");
+</script>
+</body></html>

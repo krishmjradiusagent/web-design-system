@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/fig-tokens.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/colors.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/typography.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/radius.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/base.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/components/components.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/styles.css">
+<script src="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:#fafafa;font-family:Inter,system-ui,sans-serif;color:#0a0a0a}
+*{box-sizing:border-box}
+a{color:#171717;text-decoration:underline;text-underline-offset:2px}
+a:hover{color:#5A5FF2}
+button{font-family:inherit}
+/* Icon rail sidebar */
+.figrail{width:36px;height:36px;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;padding:3px;box-sizing:border-box;color:#2A2A2A;cursor:pointer;border:0;transition:background .12s ease}
+.figrail:hover{background:rgba(255,255,255,.18)}
+.figrail[data-active="true"]{background:#fff}
+.figrail img{display:block;width:30px;height:30px}
+/* Topbar */
+.topbar{height:56px;background:#fff;border-bottom:1px solid #e5e5e5;display:flex;align-items:center;gap:16px;padding:0 22px;flex:none}
+.tb-search{position:relative;flex:1;max-width:420px;height:32px}
+.tb-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#737373;pointer-events:none}
+.tb-search input{width:100%;height:32px;padding:0 12px 0 32px;background:#fff;border:1px solid #e5e5e5;border-radius:8px;font:400 13px/1 Inter;color:#171717;outline:none;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.tb-search input:focus{border-color:#a3a3a3;box-shadow:0 0 0 3px rgba(163,163,163,.15)}
+.tb-icon-btn{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:#fff;border:1px solid #e5e5e5;border-radius:8px;color:#525252;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:background .12s ease}
+.tb-icon-btn:hover{background:#fafafa;color:#171717}
+.tb-profile{display:inline-flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;background:#fff;border:1px solid #e5e5e5;border-radius:999px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:background .12s ease}
+.tb-profile:hover{background:#fafafa}
+.tb-profile .avc{width:24px;height:24px;border-radius:50%;background:#e5e5e5;color:#525252;display:flex;align-items:center;justify-content:center;font:600 10px/1 Inter;flex:none}
+.tb-profile .nm{font:500 12.5px/1 Inter;color:#171717}
+.tb-wordmark{height:18px;display:block}
+.tb-div{width:1px;height:22px;background:#e5e5e5}
+/* Floating view switcher */
+.float-switch{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:80;display:inline-flex;background:#5A5FF2;border-radius:999px;padding:4px;box-shadow:0 8px 24px rgba(90,95,242,.28),0 2px 6px rgba(0,0,0,.08)}
+.float-switch button{height:32px;padding:0 16px;border:0;border-radius:999px;font:500 12.5px/1 Inter;cursor:pointer;background:transparent;color:rgba(255,255,255,.75);display:inline-flex;align-items:center;gap:6px;transition:all .14s ease}
+.float-switch button:hover{color:#fafafa}
+.float-switch button[data-on="true"]{background:#fafafa;color:#5A5FF2}
+.tab-btn{padding:10px 16px 12px;font:500 15px/1 Inter;color:#737373;background:transparent;border:0;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color .12s ease,border-color .12s ease}
+.tab-btn:hover{color:#171717}
+.tab-btn[data-on="true"]{color:#5A5FF2;border-bottom-color:#5A5FF2;font-weight:500}
+.tb{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;border-radius:6px;color:#525252;cursor:pointer;transition:background .12s ease}
+.tb:hover{background:#f5f5f5;color:#171717}
+.tb.on{background:#e5e5e5;color:#171717}
+.tb-sel{height:28px;display:inline-flex;align-items:center;gap:4px;padding:0 8px;background:transparent;border:0;border-radius:6px;font:500 12px/1 Inter;color:#525252;cursor:pointer;transition:background .12s ease}
+.tb-sel:hover{background:#f5f5f5;color:#171717}
+.tb-div{width:1px;height:16px;background:#e5e5e5;margin:0 4px}
+.editor{min-height:96px;padding:10px 12px;font:400 14px/1.55 Inter;color:#171717;outline:none;overflow-y:auto;max-height:200px}
+.editor:empty:before{content:"Add your email signature…";color:#a3a3a3}
+.editor a{color:#5A5FF2}
+.btn-p{height:32px;padding:0 14px;background:#5A5FF2;color:#fafafa;border:0;border-radius:10px;font:500 13px/1 Inter;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .12s ease,transform .1s ease}
+.btn-p:hover{background:#4a4fe0}
+.btn-p:active{transform:scale(.98)}
+.btn-p:disabled{background:#e5e5e5;color:#a3a3a3;cursor:not-allowed}
+.btn-g{height:32px;padding:0 12px;background:transparent;color:#171717;border:0;border-radius:10px;font:500 13px/1 Inter;cursor:pointer;transition:background .12s ease}
+.btn-g:hover{background:#f5f5f5}
+.btn-o{height:32px;padding:0 12px;background:#fff;color:#171717;border:1px solid #e5e5e5;border-radius:10px;font:500 13px/1 Inter;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);display:inline-flex;align-items:center;gap:6px;transition:background .12s ease}
+.btn-o:hover{background:#fafafa}
+.input{height:32px;padding:0 12px;background:#fff;border:1px solid #e5e5e5;border-radius:8px;font:400 14px/1 Inter;color:#171717;outline:none;width:100%;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:border-color .12s ease,box-shadow .12s ease}
+.input:focus{border-color:#a3a3a3;box-shadow:0 0 0 3px rgba(163,163,163,.15)}
+.swx{position:relative;width:26px;height:15px;background:#e5e5e5;border-radius:26px;cursor:pointer;transition:background .12s ease;flex:none;border:0;padding:0}
+.swx:after{content:"";position:absolute;top:2px;left:2px;width:11px;height:11px;background:#fff;border-radius:50%;box-shadow:0 1px 2px rgba(0,0,0,.15);transition:transform .14s ease}
+.swx.on{background:#5A5FF2}
+.swx.on:after{transform:translateX(11px)}
+.select{height:28px;padding:0 8px;background:transparent;border:0;border-radius:6px;font:500 12px/1 Inter;color:#525252;cursor:pointer;outline:none}
+.select:hover{background:#f5f5f5;color:#171717}
+.tpl-row{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #f0f0f0;transition:background .12s ease}
+.tpl-row:last-child{border-bottom:0}
+.tpl-row:hover{background:#fafafa}
+.ic-btn{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;border-radius:6px;color:#737373;cursor:pointer}
+.ic-btn:hover{background:#f5f5f5;color:#171717}
+.chip-tab{padding:10px 14px;font:500 13px/1 Inter;color:#737373;background:transparent;border:0;border-bottom:2px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:color .12s ease,border-color .12s ease}
+.chip-tab:hover{color:#171717}
+.chip-tab.on{color:#171717;border-bottom-color:#171717;font-weight:600}
+</style>
+</helmet>
+
+<div style="height:100vh;background:#fafafa;display:flex;flex-direction:column;overflow:hidden">
+
+  <!-- Top Header (spans full width above sidebar) -->
+  <header style="height:56px;background:#fff;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;display:flex;flex-direction:row;padding:0 24px;justify-content:space-between;align-items:center;box-sizing:border-box;flex:none">
+    <a href="#" aria-label="Radius home" style="height:22px;display:flex;align-items:center">
+      <img src="assets/logo-wordmark-ink.svg" alt="Radius" style="height:22px;display:block">
+    </a>
+    <button aria-label="Account menu for Vanessa Brown" style="min-width:220px;max-width:280px;height:48px;border-radius:12px;background:#fff;border:0;display:flex;flex-direction:row;gap:10px;padding:6px 10px 6px 6px;align-items:center;box-sizing:border-box;cursor:pointer">
+      <span style="width:36px;height:36px;border-radius:9999px;background:#f5f5f5;display:inline-flex;align-items:center;justify-content:center;flex:none;font:500 12px/12px Inter;letter-spacing:.24px;color:#737373">VB</span>
+      <span style="display:flex;flex-direction:column;gap:1px;align-items:flex-start;flex:1;min-width:0;text-align:left">
+        <span style="font:600 14px/16.8px Inter;color:#0a0a0a;white-space:nowrap">Vanessa Brown</span>
+        <span style="font:400 12px/15px Inter;color:#737373;white-space:nowrap">vanessa@radiusagent.com</span>
+      </span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#737373" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round" style="flex:none">
+        <path d="M4.667 6L8 2.667 11.333 6"></path>
+        <path d="M4.667 10L8 13.333 11.333 10"></path>
+      </svg>
+    </button>
+  </header>
+
+  <div style="flex:1;display:flex;min-height:0">
+
+  <!-- LEFT SIDE BAR -->
+  <aside style="position:relative;width:56px;min-width:56px;height:100%;background:#7BA69E;display:flex;flex-direction:column;gap:20px;padding:14px 0;align-items:center;flex:none;box-sizing:border-box;overflow-y:auto">
+
+    <!-- Circle wordmark (white) -->
+    <div role="img" aria-label="Circle" style="width:39px;height:20px;display:block;flex:none;-webkit-mask:url(assets/fig-circle-wordmark.svg) no-repeat center/contain;mask:url(assets/fig-circle-wordmark.svg) no-repeat center/contain;background:#ffffff"></div>
+
+    <!-- Mel logo -->
+    <img src="assets/mel-clip.svg" alt="Mel" style="width:36px;height:36px;display:block;flex:none">
+
+    <!-- Group 1: Dashboard, Team, Location, Docs, Chat(99) -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <button class="figrail" title="Dashboard"><img src="assets/icons/presentation-chart-bar.svg" alt=""></button>
+      <button class="figrail" title="Team"><img src="assets/icons/user-group.svg" alt=""></button>
+      <button class="figrail" title="Location"><img src="assets/icons/map-pin.svg" alt=""></button>
+      <button class="figrail" title="Documents"><img src="assets/icons/document.svg" alt=""></button>
+      <button class="figrail" title="Messages" style="position:relative"><img src="assets/icons/chat.svg" alt=""><span style="position:absolute;top:-2px;right:-8px;min-width:22px;height:16px;padding:0 5px;background:#6366F1;color:#fff;font:600 10px/16px Inter;border-radius:3px;text-align:center;box-sizing:border-box">99</span></button>
+    </div>
+
+    <!-- Group 2: Wallet, Gift -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <button class="figrail" title="Wallet"><img src="assets/icons/wallet.svg" alt=""></button>
+      <button class="figrail" title="Rewards"><img src="assets/icons/gift.svg" alt=""></button>
+    </div>
+
+    <!-- Group 3: RSS, Briefcase, Users, Speakerphone -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <button class="figrail" title="Feed"><img src="assets/icons/rss.svg" alt=""></button>
+      <button class="figrail" title="Work"><img src="assets/icons/briefcase.svg" alt=""></button>
+      <button class="figrail" data-active="{{ isClient }}" onClick="{{ gotoClient }}" title="Members"><img src="assets/icons/users.svg" alt=""></button>
+      <button class="figrail" title="Broadcast"><img src="assets/icons/speakerphone.svg" alt=""></button>
+    </div>
+
+    <!-- Group 4: Lifebuoy, Settings (active), Chart -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <button class="figrail" title="Support"><img src="assets/icons/lifebuoy.svg" alt=""></button>
+      <button class="figrail" data-active="{{ isSettings }}" onClick="{{ gotoSettings }}" title="Settings"><img src="assets/icons/cog-8-tooth.svg" alt=""></button>
+      <button class="figrail" title="Statistics"><img src="assets/icons/chart-bar.svg" alt=""></button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+
+    <!-- Top Header lives above the flex row now -->
+
+    <!-- =================== VIEW A: SETTINGS =================== -->
+    <sc-if value="{{ isSettings }}">
+    <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+
+      <!-- H1 + tab bar -->
+      <div style="padding:12px 32px 0;background:#fff;border-bottom:1px solid #e5e5e5">
+        <div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;height:28px">
+          <button title="Toggle sidebar" style="width:28px;height:28px;border-radius:8px;border:0;background:transparent;color:#0A0A0A;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0" style-hover="background:#F5F5F5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="9" y1="4" x2="9" y2="20"></line></svg>
+          </button>
+          <div style="width:1px;height:16px;background:#E5E5E5"></div>
+          <h1 style="margin:0;font:600 14px/1.2 Inter;color:#0A0A0A">Settings</h1>
+        </div>
+        <div style="display:flex;gap:4px;overflow-x:auto;margin:0 -16px;padding:0 12px">
+          <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="16">
+            <button class="tab-btn" onClick="{{ tab.select }}" data-on="{{ tab.selected }}" style="font-size: 14px">{{ tab.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- Scrollable content column -->
+      <div style="flex:1;overflow-y:auto;padding:32px 32px 48px">
+        <div style="max-width:920px;margin:0 auto">
+
+          <!-- SECTION 1: EMAIL SIGNATURE -->
+          <section style="margin-bottom:32px">
+            <div style="margin-bottom:16px">
+              <h2 style="margin:0 0 4px;font:600 18px/1.3 Inter;color:#171717;letter-spacing:-0.005em">Email signature</h2>
+              <p style="margin:0;font:400 13px/1.5 Inter;color:#737373">Added to the bottom of emails you send from Radius.</p>
+            </div>
+
+            <div><!-- signature editor width matches templates -->
+              <!-- Editor card -->
+              <div style="background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.04); overflow: hidden">
+                <!-- Toolbar -->
+                <div style="display:flex;align-items:center;gap:2px;padding:6px 8px;border-bottom:1px solid #f0f0f0;background:#fafafa;flex-wrap:wrap">
+                  <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.DropdownMenu" trigger="{{ fontTrigger }}" items="{{ fontItems }}" hint-size="auto,28px"></x-import>
+                  <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.DropdownMenu" trigger="{{ sizeTrigger }}" items="{{ sizeItems }}" hint-size="auto,28px"></x-import>
+                  <div class="tb-div"></div>
+                  <button class="tb" onClick="{{ toggleBold }}" data-on="{{ fmtBold }}" style="{{ fmtBoldStyle }}" title="Bold"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg></button>
+                  <button class="tb" onClick="{{ toggleItalic }}" data-on="{{ fmtItalic }}" style="{{ fmtItalicStyle }}" title="Italic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="4" x2="10" y2="4"></line><line x1="14" y1="20" x2="5" y2="20"></line><line x1="15" y1="4" x2="9" y2="20"></line></svg></button>
+                  <button class="tb" onClick="{{ toggleUnderline }}" data-on="{{ fmtUnderline }}" style="{{ fmtUnderlineStyle }}" title="Underline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a6 6 0 0 0 12 0V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg></button>
+                  <div class="tb-div"></div>
+                  <button class="tb-sel" onClick="{{ openColor }}" title="Text color">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"></path><path d="M6 16l6-12 6 12"></path><path d="M8 12h8"></path></svg>
+                    <span style="width:10px;height:10px;border-radius:2px;background:{{ colorVal }};border:1px solid rgba(0,0,0,.1)"></span>
+                  </button>
+                  <button class="tb" onClick="{{ openLink }}" title="Insert link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button>
+                  <div class="tb-div"></div>
+                  <button class="tb" title="Align left"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="17" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="17" y1="18" x2="3" y2="18"></line></svg></button>
+                  <button class="tb" title="Align center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="10" x2="6" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg></button>
+                  <div class="tb-div"></div>
+                  <button class="tb" title="Bulleted list"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button>
+                  <button class="tb" title="Numbered list"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"></line><line x1="10" y1="12" x2="21" y2="12"></line><line x1="10" y1="18" x2="21" y2="18"></line><path d="M4 6h1v4"></path><path d="M4 10h2"></path><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path></svg></button>
+                  <div class="tb-div"></div>
+                  <button class="tb" title="Insert image (paste supported)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg></button>
+                </div>
+                <!-- Editor body -->
+                <div contentEditable="{{ true }}" class="editor" ref="{{ editorRef }}" onInput="{{ onEdit }}" onKeyDown="{{ onKey }}" onPaste="{{ onPaste }}"></div>
+                <!-- Footer: Use by default -->
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid #f0f0f0;background:#fafafa">
+                  <button class="swx {{ swxDefaultClass }}" onClick="{{ toggleDefault }}"></button>
+                  <div style="font:500 12.5px/1.3 Inter;color:#171717">Use by default</div>
+                  <div style="font:400 12px/1.3 Inter;color:#737373">Include this signature on new emails.</div>
+                </div>
+                <!-- Save/Cancel banner (only when dirty) -->
+                <sc-if value="{{ dirty }}">
+                  <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid #f0f0f0;background:#fafafa">
+                    <span style="font:400 12.5px/1.3 Inter;color:#737373">Unsaved changes</span>
+                    <div style="flex:1"></div>
+                    <button class="btn-g" onClick="{{ discardChanges }}">Cancel</button>
+                    <button class="btn-p" disabled="{{ saveDisabled }}" onClick="{{ saveChanges }}" style="{{ saveBtnStyle }}">
+                      <sc-if value="{{ saving }}"><span style="width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .6s linear infinite;display:inline-block"></span></sc-if>
+                      {{ saveLabel }}
+                    </button>
+                  </div>
+                </sc-if>
+              </div>
+
+              <!-- Link popover -->
+              <sc-if value="{{ linkOpen }}">
+                <div style="margin-top:8px;padding:12px;background:#fff;border:1px solid #e5e5e5;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.08);max-width:360px">
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <label style="font:500 12px/1 Inter;color:#525252">URL</label>
+                    <input class="input" placeholder="https://" value="{{ linkUrl }}" onInput="{{ onLinkUrl }}">
+                    <label style="font:500 12px/1 Inter;color:#525252;margin-top:4px">Text</label>
+                    <input class="input" placeholder="Link text" value="{{ linkText }}" onInput="{{ onLinkText }}">
+                    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
+                      <button class="btn-g" onClick="{{ closeLink }}">Cancel</button>
+                      <button class="btn-p" onClick="{{ applyLink }}">Apply</button>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <!-- Color popover -->
+              <sc-if value="{{ colorOpen }}">
+                <div style="margin-top:8px;padding:12px;background:#fff;border:1px solid #e5e5e5;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.08);max-width:240px">
+                  <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px">
+                    <sc-for list="{{ colors }}" as="c" hint-placeholder-count="16">
+                      <button onClick="{{ c.pick }}" title="{{ c.hex }}" style="{{ c.style }}"></button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
+            </div>
+          </section>
+
+          <!-- Separator -->
+          <div style="height:1px;background:#e5e5e5;margin:32px 0"></div>
+
+          <!-- SECTION 2: EMAIL TEMPLATES (untouched behavior — visual parity with existing) -->
+          <section>
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px">
+              <div>
+                <h2 style="margin:0 0 4px;font:600 18px/1.3 Inter;color:#171717;letter-spacing:-0.005em">Email templates</h2>
+                <p style="margin:0;font:400 13px/1.5 Inter;color:#737373">Create and manage reusable email templates for your workflow.</p>
+              </div>
+              <button class="btn-o"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>New template</button>
+            </div>
+
+            <div style="background:#fff;border:1px solid #e5e5e5;border-radius:10px;box-shadow:0 1px 2px rgba(0,0,0,.04);overflow:hidden">
+              <sc-for list="{{ templates }}" as="t" hint-placeholder-count="4">
+                <div class="tpl-row">
+                  <div style="min-width:0;flex:1">
+                    <div style="font:500 14px/1.3 Inter;color:#171717">{{ t.name }}</div>
+                    <div style="font:400 12px/1.4 Inter;color:#737373;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.subject }}</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;flex:none">
+                    <span style="font:400 12px/1 Inter;color:#a3a3a3;font-family:'Geist Mono',ui-monospace,monospace">{{ t.used }}</span>
+                    <button class="ic-btn" title="Edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+                    <button class="ic-btn" title="More"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+      <!-- Toast (Sonner) -->
+      <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Sonner" toasts="{{ sonnerToasts }}" hint-size="auto,auto"></x-import>
+
+    </div>
+    </sc-if>
+
+    <!-- =================== VIEW B: CLIENT PROFILE / SEND TO CLIENT =================== -->
+    <sc-if value="{{ isClient }}">
+    <div style="flex:1;overflow:auto;background:#fafafa;padding:24px;display:flex;justify-content:center;align-items:flex-start">
+      <!-- Send-to-client composer card, per Figma design -->
+      <div style="width:100%;max-width:640px;background:#ffffff;border:1px solid #e5e5e5;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.04);overflow:hidden;font-family:Inter,system-ui,sans-serif;font-size:13px">
+
+        <!-- Tabs -->
+        <div style="display:flex;align-items:stretch;padding:0 16px;border-bottom:1px solid #e5e5e5;gap:8px">
+          <button onClick="{{ setComposerCreate }}" style="{{ compCreateTabStyle }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            Create Note
+          </button>
+          <button onClick="{{ setComposerCall }}" style="{{ compCallTabStyle }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            Log Call
+          </button>
+          <button onClick="{{ setComposerText }}" style="{{ compTextTabStyle }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Send to client
+          </button>
+        </div>
+
+        <!-- From row -->
+        <div style="display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid #f0f0f0;gap:16px">
+          <div style="width:48px;flex:none;font:400 13px/1 Inter;color:#737373">From</div>
+          <div style="display:flex;align-items:center;gap:10px;min-width:0">
+            <span style="width:24px;height:24px;border-radius:50%;background:#38BDF8;color:#ffffff;display:inline-flex;align-items:center;justify-content:center;font:600 10px/1 Inter;flex:none">KI</span>
+            <span style="font:500 14px/1 Inter;color:#171717">Kira</span>
+          </div>
+        </div>
+
+        <!-- To row -->
+        <div style="display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid #f0f0f0;gap:16px">
+          <div style="width:48px;flex:none;font:400 13px/1 Inter;color:#737373">To</div>
+          <div style="display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap">
+            <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#f5f5f5;border-radius:999px;font:500 13px/1 Inter;color:#171717">Violet Cole</span>
+            <button aria-label="Add recipient" style="width:22px;height:22px;border-radius:50%;border:1px dashed #a3a3a3;background:transparent;color:#737373;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Via row -->
+        <div style="display:flex;align-items:center;padding:12px 20px;border-bottom:1px solid #f0f0f0;gap:16px">
+          <div style="width:48px;flex:none;font:400 13px/1 Inter;color:#737373">Via</div>
+          <div style="display:inline-flex;align-items:center;gap:2px;background:transparent;padding:0">
+            <button onClick="{{ setChTextSms }}" style="{{ chTextSmsStyle }}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              Text (SMS)
+            </button>
+            <button onClick="{{ setChInApp }}" style="{{ chInAppStyle }}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+              In-app chat
+            </button>
+            <button onClick="{{ setChEmail }}" style="{{ chEmailStyle }}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              Email
+            </button>
+          </div>
+        </div>
+
+        <!-- Message body -->
+        <div style="padding:14px 20px 8px">
+          <textarea placeholder="{{ msgPlaceholder }}" value="{{ msgBody }}" onInput="{{ onMsgInput }}" style="width:100%;min-height:120px;border:0;outline:none;resize:vertical;font:400 14px/1.55 Inter;color:#171717;background:transparent;padding:0"></textarea>
+
+          <!-- Signature preview (email only) -->
+          <sc-if value="{{ showSignature }}">
+            <div style="margin-top:12px;padding-top:12px;border-top:1px dashed #e5e5e5;font:400 13px/1.55 Inter;color:#525252" dangerouslySetInnerHTML="{{ sigHtmlObj }}"></div>
+          </sc-if>
+        </div>
+
+        <!-- Include-signature toggle (email only) -->
+        <sc-if value="{{ isEmailChannel }}">
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 20px 12px">
+            <button class="swx {{ swxIncludeClass }}" onClick="{{ toggleInclude }}"></button>
+            <span style="font:500 13px/1 Inter;color:#171717">Include email signature</span>
+            <sc-if value="{{ noSigWarn }}">
+              <span style="font:400 12px/1 Inter;color:#a3a3a3">— no signature set yet</span>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <!-- Attachment chip -->
+        <div style="padding:0 20px 14px">
+          <span style="display:inline-flex;align-items:center;gap:8px;padding:6px 10px;background:#f5f5f5;border-radius:999px;font:400 13px/1 Inter;color:#171717">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#737373" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg>
+            attachment-1.pdf
+            <button aria-label="Remove attachment" style="width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;border:0;background:transparent;color:#737373;cursor:pointer;padding:0">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </span>
+        </div>
+
+        <!-- Footer -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px 12px 20px;border-top:1px solid #f0f0f0;gap:12px">
+          <div style="display:flex;align-items:center;gap:8px;min-width:0">
+            <button aria-label="Attach file" style="width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;border-radius:6px;color:#737373;cursor:pointer;padding:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 17.98 8.9l-8.58 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+            </button>
+            <span style="font:400 13px/1 Inter;color:#737373">Sends via {{ chLabel }} · 1 recipient</span>
+          </div>
+          <button style="height:36px;padding:0 16px;background:#5A5FF2;color:#fafafa;border:0;border-radius:10px;font:600 13px/1 Inter;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .12s ease">Send Message</button>
+        </div>
+
+      </div>
+    </div>
+    </sc-if>
+
+  </main>
+  </div>
+</div>
+
+<!-- Floating view switcher -->
+<div class="float-switch">
+  <button data-on="{{ isSettings }}" onClick="{{ gotoSettings }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.08 7.08 4.24 4.24M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.08-7.08 4.24-4.24"></path></svg>Settings view</button>
+  <button data-on="{{ isClient }}" onClick="{{ gotoClient }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Client profile view</button>
+</div>
+
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    view: 'settings',
+    selectedTab: 'Email Settings',
+    sigHtml: '<b>Kira Alvarez</b><br>Senior Agent · Radius<br>(415) 555-0198 · kira@radius.example',
+    dirty: false,
+    saving: false,
+    toast: false,
+    useDefault: true,
+    linkOpen: false,
+    linkUrl: '',
+    linkText: '',
+    colorOpen: false,
+    color: '#171717',
+    fmtBold: false, fmtItalic: false, fmtUnderline: false,
+    fontFamily: 'Inter',
+    fontSize: 'Normal',
+    includeSig: true,
+    composer: 'text',      // outer tabs: 'create' | 'call' | 'text' (Send to client)
+    channel: 'email',      // Via: 'sms' | 'inapp' | 'email'
+    msgBody: '',
+    toasts: []
+  };
+
+  pushToast = (t) => {
+    const id = Date.now() + Math.random();
+    this.setState({ toasts: [...(this.state.toasts || []), { ...t, id }] });
+    setTimeout(() => {
+      this.setState({ toasts: (this.state.toasts || []).filter(x => x.id !== id) });
+    }, 3200);
+  };
+
+  componentDidMount() {
+    if (this.editor && !this.editor.innerHTML) {
+      this.editor.innerHTML = this.state.sigHtml || '';
+    }
+  }
+
+  markDirty = () => { if (!this.state.dirty) this.setState({ dirty: true }); };
+
+  exec(cmd, val) {
+    if (this.editor) this.editor.focus();
+    try { document.execCommand(cmd, false, val); } catch(e) {}
+    this.setState({
+      fmtBold: document.queryCommandState('bold'),
+      fmtItalic: document.queryCommandState('italic'),
+      fmtUnderline: document.queryCommandState('underline')
+    });
+    this.markDirty();
+  }
+
+  renderVals() {
+    const s = this.state;
+    const TABS = ['Accounts','Email Settings','AI Campaigns','Automations','Billing','CDA Settings','Client App / Portal','Collaborators','Custom Fields','Finances','Integrations','Notifications','Phone Numbers','Pods','Team Settings','Transaction Settings'];
+    const tabs = TABS.map(label => ({
+      label,
+      selected: label === s.selectedTab,
+      style: label===s.selectedTab
+        ? { padding:'10px 12px', color:'#5A5FF2', fontWeight:600, borderBottom:'2px solid #5A5FF2', background:'transparent', border:'0', borderBottomWidth:'2px', borderBottomStyle:'solid', borderBottomColor:'#5A5FF2', font:'600 13px/1 Inter', cursor:'pointer', whiteSpace:'nowrap' }
+        : { padding:'10px 12px', color:'#737373', fontWeight:500, borderBottom:'2px solid transparent', background:'transparent', border:'0', borderBottomWidth:'2px', borderBottomStyle:'solid', borderBottomColor:'transparent', font:'500 13px/1 Inter', cursor:'pointer', whiteSpace:'nowrap' },
+      select: () => this.setState({ selectedTab: label })
+    }));
+
+    const templates = [
+      { name:'New listing announcement', subject:'Just listed — {{address}}', used:'used 12×' },
+      { name:'Showing confirmation',     subject:'Your showing is confirmed for {{date}}', used:'used 34×' },
+      { name:'Offer follow-up',          subject:'Following up on your offer', used:'used 8×' },
+      { name:'Post-close thank you',     subject:'Congrats on your new home 🎉', used:'used 21×' }
+    ];
+
+    const COLORS = ['#171717','#525252','#737373','#a3a3a3','#DC2626','#EA580C','#6DA544','#2563EB','#5A5FF2','#7c3aed','#db2777','#0891b2','#ca8a04','#166534','#1e3a8a','#000000'];
+    const colors = COLORS.map(hex => ({
+      hex,
+      style: { width:'22px', height:'22px', borderRadius:'4px', background: hex, border: hex===s.color?'2px solid #171717':'1px solid rgba(0,0,0,.1)', cursor:'pointer', padding:0 },
+      pick: () => { this.setState({ color: hex, colorOpen: false }); this.exec('foreColor', hex); }
+    }));
+
+    const toneBtn = (on) => on ? { background:'#e5e5e5', color:'#171717' } : {};
+
+    const saveDisabled = !s.dirty || s.saving;
+
+    const sigHtmlObj = { __html: s.sigHtml || '<span style="color:#a3a3a3">No signature yet.</span>' };
+
+    const composerTabStyle = (on) => ({
+      display:'inline-flex', alignItems:'center', gap:8,
+      padding:'10px 12px',
+      background:'transparent',
+      border:'0',
+      borderBottom: on ? '2px solid #5A5FF2' : '2px solid transparent',
+      borderRadius:0,
+      font: on ? '600 13px/1 Inter' : '500 13px/1 Inter',
+      color: on ? '#5A5FF2' : '#737373',
+      cursor:'pointer',
+      whiteSpace:'nowrap',
+      transition:'color .12s ease, border-color .12s ease'
+    });
+
+    const channelChipStyle = (on) => ({
+      display:'inline-flex', alignItems:'center', gap:6,
+      padding:'6px 12px',
+      background: on ? '#ffffff' : 'transparent',
+      border: on ? '1px solid #e5e5e5' : '1px solid transparent',
+      borderRadius:8,
+      font: on ? '600 13px/1 Inter' : '500 13px/1 Inter',
+      color: on ? '#171717' : '#737373',
+      cursor:'pointer',
+      whiteSpace:'nowrap',
+      boxShadow: on ? '0 1px 2px rgba(0,0,0,.04)' : 'none',
+      transition:'background .12s ease, color .12s ease, border-color .12s ease'
+    });
+
+    return {
+      // view flags
+      isSettings: s.view === 'settings',
+      isClient: s.view === 'client',
+      currentTabLabel: s.selectedTab,
+      topTitle: s.view === 'client' ? 'Client · Alicia Reyes' : 'Settings',
+      gotoSettings: () => this.setState({ view: 'settings' }),
+      gotoClient: () => this.setState({ view: 'client' }),
+
+      // tabs
+      tabs,
+
+      // editor
+      editorRef: (el) => { this.editor = el; },
+      onEdit: () => { if (this.editor) { this.setState({ sigHtml: this.editor.innerHTML }); this.markDirty(); } },
+      onKey: () => {},
+      onPaste: () => this.markDirty(),
+
+      // toolbar
+      toggleBold: () => this.exec('bold'),
+      toggleItalic: () => this.exec('italic'),
+      toggleUnderline: () => this.exec('underline'),
+      fmtBold: s.fmtBold, fmtItalic: s.fmtItalic, fmtUnderline: s.fmtUnderline,
+      fmtBoldStyle: toneBtn(s.fmtBold),
+      fmtItalicStyle: toneBtn(s.fmtItalic),
+      fmtUnderlineStyle: toneBtn(s.fmtUnderline),
+
+      // color
+      openColor: () => this.setState({ colorOpen: !s.colorOpen, linkOpen: false }),
+      colorOpen: s.colorOpen,
+      colorVal: s.color,
+      colors,
+      fontFamily: s.fontFamily,
+      fontSize: s.fontSize,
+      fontTrigger: React.createElement('button', { className:'tb-sel', title:'Font family' },
+        React.createElement('span', null, s.fontFamily),
+        React.createElement('svg', { width:10, height:10, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round' },
+          React.createElement('polyline', { points:'6 9 12 15 18 9' }))
+      ),
+      fontItems: ['Inter','Geist','Georgia','Arial'].map(name => ({
+        label: name,
+        onSelect: () => { this.setState({ fontFamily: name }); this.exec('fontName', name); }
+      })),
+      sizeTrigger: React.createElement('button', { className:'tb-sel', title:'Text size' },
+        React.createElement('span', null, s.fontSize),
+        React.createElement('svg', { width:10, height:10, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round' },
+          React.createElement('polyline', { points:'6 9 12 15 18 9' }))
+      ),
+      sizeItems: [['Small','2'],['Normal','3'],['Large','5'],['Huge','7']].map(([name, val]) => ({
+        label: name,
+        onSelect: () => { this.setState({ fontSize: name }); this.exec('fontSize', val); }
+      })),
+
+      // link
+      openLink: () => this.setState({ linkOpen: !s.linkOpen, colorOpen: false }),
+      linkOpen: s.linkOpen,
+      linkUrl: s.linkUrl,
+      linkText: s.linkText,
+      onLinkUrl: (e) => this.setState({ linkUrl: e.target.value }),
+      onLinkText: (e) => this.setState({ linkText: e.target.value }),
+      closeLink: () => this.setState({ linkOpen: false, linkUrl: '', linkText: '' }),
+      applyLink: () => {
+        if (s.linkUrl) {
+          const txt = s.linkText || s.linkUrl;
+          const html = `<a href="${s.linkUrl}">${txt}</a>`;
+          if (this.editor) { this.editor.focus(); document.execCommand('insertHTML', false, html); this.setState({ sigHtml: this.editor.innerHTML }); }
+        }
+        this.setState({ linkOpen: false, linkUrl: '', linkText: '', dirty: true });
+      },
+
+      // default switch
+      swxDefaultClass: s.useDefault ? 'on' : '',
+      toggleDefault: () => { this.setState({ useDefault: !s.useDefault, dirty: true }); },
+
+      // templates
+      templates,
+
+      // footer save
+      dirty: s.dirty,
+      saving: s.saving,
+      saveDisabled,
+      saveLabel: s.saving ? 'Saving…' : 'Save changes',
+      saveBtnStyle: saveDisabled ? { background:'#e5e5e5', color:'#a3a3a3', cursor:'not-allowed' } : {},
+      saveChanges: () => {
+        if (saveDisabled) return;
+        this.setState({ saving: true });
+        setTimeout(() => this.setState({ saving: false, dirty: false }, () => {
+          this.pushToast({ variant:'success', title:'Signature saved', description:'Your email signature changes are live.' });
+        }), 700);
+      },
+      discardChanges: () => {
+        if (this.editor) this.editor.innerHTML = this.state.sigHtml;
+        this.setState({ dirty: false });
+      },
+      sonnerToasts: (s.toasts || []).map(t => ({
+        id: t.id,
+        variant: t.variant,
+        title: t.title,
+        description: t.description,
+        icon: React.createElement('svg', { width:16, height:16, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:2.5, strokeLinecap:'round', strokeLinejoin:'round' },
+          React.createElement('polyline', { points:'20 6 9 17 4 12' }))
+      })),
+
+      // ==== Send-to-client composer ====
+      setComposerCreate: () => this.setState({ composer: 'create' }),
+      setComposerCall: () => this.setState({ composer: 'call' }),
+      setComposerText: () => this.setState({ composer: 'text' }),
+
+      // Outer tab pill styles (active = white bg + indigo border/text; inactive = transparent + muted)
+      compCreateTabStyle: composerTabStyle(s.composer === 'create'),
+      compCallTabStyle: composerTabStyle(s.composer === 'call'),
+      compTextTabStyle: composerTabStyle(s.composer === 'text'),
+
+      // Via / channel
+      setChTextSms: () => this.setState({ channel: 'sms' }),
+      setChInApp:   () => this.setState({ channel: 'inapp' }),
+      setChEmail:   () => this.setState({ channel: 'email' }),
+      chTextSmsStyle: channelChipStyle(s.channel === 'sms'),
+      chInAppStyle:   channelChipStyle(s.channel === 'inapp'),
+      chEmailStyle:   channelChipStyle(s.channel === 'email'),
+      chLabel: s.channel === 'sms' ? 'SMS' : (s.channel === 'inapp' ? 'in-app chat' : 'email'),
+      isEmailChannel: s.channel === 'email',
+      showSignature: s.channel === 'email' && s.includeSig && !!s.sigHtml,
+
+      // Body
+      msgBody: s.msgBody,
+      msgPlaceholder: s.channel === 'email' ? 'Type your email…' : (s.channel === 'inapp' ? 'Type your chat message…' : 'Type your text message…'),
+      onMsgInput: (e) => this.setState({ msgBody: e.target.value }),
+
+      includeSig: s.includeSig && !!s.sigHtml,
+      noSigWarn: s.includeSig && !s.sigHtml,
+      toggleInclude: () => this.setState({ includeSig: !s.includeSig }),
+      swxIncludeClass: s.includeSig ? 'on' : '',
+      sigHtmlObj
+    };
+  }
+}
+</script>
+</body>
+</html>

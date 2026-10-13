@@ -1,0 +1,55 @@
+<!-- @dsCard group="Components" viewport="900x520" name="Logo · AddUser · ProgressBarLines · ButtonGroupBase · GoogleIcon" subtitle="Brand marks, segmented controls, segmented progress" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:24px;background:var(--background);font-family:var(--font-sans)}.grid{display:flex;flex-direction:column;gap:24px}.lbl{font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--muted-foreground);text-transform:uppercase;margin-bottom:8px}.row{display:flex;gap:24px;flex-wrap:wrap;align-items:center}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Logo, AddUser, ProgressBarLines, ButtonGroupBase, GoogleIcon } = window.RadiusUIDesignSystem_c7220b;
+function Demo(){
+  const [view,setView]=React.useState("list");
+  return (
+    <div className="grid">
+      <div><div className="lbl">Logo</div>
+        <div className="row">
+          <Logo variant="wordmark" tone="ink" src="../../assets/logo-wordmark-ink.svg" />
+          <Logo variant="wordmark" tone="dark" src="../../assets/logo-wordmark-dark.svg" />
+          <Logo variant="mark" tone="ink" src="../../assets/logo-mark-dark.svg" size={28}/>
+        </div>
+      </div>
+      <div><div className="lbl">AddUser</div>
+        <div className="row"><AddUser size="sm"/><AddUser size="md"/><AddUser size="lg"/></div>
+      </div>
+      <div><div className="lbl">ButtonGroupBase — outline · ghost · solid</div>
+        <div className="row">
+          <ButtonGroupBase value={view} onChange={setView} items={[{value:"list",label:"List"},{value:"grid",label:"Grid"},{value:"map",label:"Map"}]}/>
+          <ButtonGroupBase style="ghost" value={view} onChange={setView} items={[{value:"list",label:"List"},{value:"grid",label:"Grid"},{value:"map",label:"Map"}]}/>
+          <ButtonGroupBase style="solid" value={view} onChange={setView} items={[{value:"list",label:"List"},{value:"grid",label:"Grid"}]}/>
+        </div>
+      </div>
+      <div><div className="lbl">ProgressBarLines</div>
+        <div className="row" style={{gap:16}}>
+          <ProgressBarLines percentage={30}/>
+          <ProgressBarLines percentage={70} color="green"/>
+          <ProgressBarLines percentage={90} color="orange" segments={12}/>
+          <ProgressBarLines percentage={20} color="red" size="sm"/>
+        </div>
+      </div>
+      <div><div className="lbl">GoogleIcon</div>
+        <div className="row"><GoogleIcon size={16}/><GoogleIcon size={20}/><GoogleIcon size={32}/></div>
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body>
+</html>

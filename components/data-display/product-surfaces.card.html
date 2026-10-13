@@ -1,0 +1,63 @@
+<!-- @dsCard group="Components" viewport="1000x640" name="Rating · StatCard · Timeline · Callout · Steps · SearchInput · PageHeader" subtitle="Product surfaces" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:24px;background:var(--background);font-family:var(--font-sans)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}.lbl{font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--muted-foreground);text-transform:uppercase;margin-bottom:8px}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Rating, StatCard, Timeline, Callout, Steps, SearchInput, PageHeader, Button } = window.RadiusUIDesignSystem_c7220b;
+function Demo(){
+  const [q,setQ]=React.useState("");
+  return (
+    <div>
+      <PageHeader title="Deals" description="Active buyer and seller sides across your team."
+        actions={<><Button variant="outline">Export</Button><Button>New deal</Button></>}
+        meta={<SearchInput value={q} onChange={setQ} placeholder="Search deals…"/>} />
+      <div className="grid">
+        <div><div className="lbl">StatCard</div>
+          <div style={{display:"flex",gap:12}}>
+            <StatCard label="Closed this month" value="$1.24M" trend="up" delta="+12%" hint="vs last month"/>
+            <StatCard label="Under contract" value="7" trend="flat" delta="0" hint="unchanged"/>
+          </div>
+        </div>
+        <div><div className="lbl">Rating</div>
+          <Rating value={4}/>
+          <div style={{height:8}}/>
+          <Rating value={3} size={20}/>
+        </div>
+        <div><div className="lbl">Timeline</div>
+          <Timeline items={[
+            {time:"Today",title:"Offer accepted",description:"Buyer signed at 3:42 pm",tone:"green"},
+            {time:"Yesterday",title:"Inspection scheduled",tone:"blue"},
+            {time:"Mon",title:"CDA drafted",description:"Awaiting TC review"},
+          ]}/>
+        </div>
+        <div><div className="lbl">Callout</div>
+          <Callout tone="blue" title="Mel drafted a follow-up">You can review or send it as-is.</Callout>
+          <div style={{height:8}}/>
+          <Callout tone="yellow" title="Missing signature">One party hasn't signed the disclosure.</Callout>
+        </div>
+        <div style={{gridColumn:"1 / -1"}}><div className="lbl">Steps</div>
+          <Steps current={1} steps={[
+            {title:"Under contract"},
+            {title:"Inspection",description:"5 of 7 items"},
+            {title:"Appraisal"},
+            {title:"Close"},
+          ]}/>
+        </div>
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body>
+</html>

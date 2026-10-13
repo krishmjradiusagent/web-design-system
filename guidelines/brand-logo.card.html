@@ -1,0 +1,19 @@
+<!-- @dsCard group="Brand" viewport="700x200" name="Logo" subtitle="Radius wordmark & mark — never recolor" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><link rel="stylesheet" href="../styles.css"/>
+<style>
+  body{margin:0;padding:20px;background:var(--background);font-family:var(--font-sans)}
+  .row{display:flex;gap:16px;flex-wrap:wrap}
+  .panel{flex:1;min-width:200px;border:1px solid var(--border);border-radius:var(--radius-card);padding:24px;display:flex;align-items:center;justify-content:center;gap:14px}
+  .dark{background:var(--neutral-950);border-color:var(--neutral-800)}
+  img{height:26px;display:block}
+  .mk{height:34px}
+  .lbl{font-family:var(--font-mono);font-size:10px;color:var(--muted-foreground);margin:10px 0 0}
+</style></head>
+<body>
+  <div class="row">
+    <div class="panel"><img class="mk" src="../assets/logo-mark-dark.svg" alt="Radius mark"/><img src="../assets/logo-wordmark-ink.svg" alt="Radius"/></div>
+    <div class="panel dark"><img class="mk" src="../assets/logo-mark-light.svg" alt="Radius mark"/><img src="../assets/logo-wordmark-white.svg" alt="Radius"/></div>
+  </div>
+  <p class="lbl">Ink #292A37 on light · white #FDFDFD on dark. Do not recolor, restretch, or add effects to the mark.</p>
+</body></html>

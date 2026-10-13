@@ -1,0 +1,7 @@
+/* Radius UI — Webfonts
+   Product UI uses Inter (400–700). Geist + Geist Mono appear in the source kit
+   (shadcn heritage) and are kept available. Numbers/metrics use the mono stack.
+   Financier Display (marketing heroes) is NOT on Google Fonts — substituted with
+   Newsreader as the nearest transitional serif. FLAG: replace with licensed
+   Financier Display webfont files when available. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400&display=swap');

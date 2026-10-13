@@ -1,0 +1,48 @@
+<!-- @dsCard group="Components" viewport="700x460" name="Feedback — Alert, Dialog, Empty, Spinner" subtitle="Plain, specific messaging; one primary action" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--background)}.grid{display:flex;flex-direction:column;gap:16px}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Alert, Dialog, Empty, Spinner, Button, Icon } = window.RadiusUIDesignSystem_c7220b;
+function Demo(){
+  const [open,setOpen]=React.useState(false);
+  return (
+    <div className="grid">
+      <Alert icon={<Icon name="sparkles" size={18} />} title="Mel drafted your listing summary">
+        Review the highlights before sending to the Delgado sellers.
+      </Alert>
+      <Alert variant="destructive" icon={<Icon name="triangle-alert" size={18} />} title="Commission disbursement authorization not ready">
+        The CDA unlocks once both sides confirm the net sheet.
+      </Alert>
+      <div style={{display:"flex",gap:24,alignItems:"flex-start",flexWrap:"wrap"}}>
+        <div style={{flex:"1 1 220px",border:"1px solid var(--border)",borderRadius:"var(--radius-card)"}}>
+          <Empty icon={<Icon name="folder" size={24} />} title="No documents yet"
+            description="Upload a purchase agreement to start the transaction file."
+            action={<Button size="sm" leftIcon={<Icon name="upload" />}>Upload document</Button>} />
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:10}}>
+          <Button onClick={()=>setOpen(true)}>Open dialog</Button>
+          <div style={{display:"flex",gap:8,alignItems:"center",color:"var(--muted-foreground)",fontSize:13}}><Spinner/> Syncing transactions…</div>
+        </div>
+      </div>
+      <Dialog open={open} onClose={()=>setOpen(false)}
+        title="Confirm calculated commission"
+        description="Radius calculated $26,550 (2.5% of $1,062,000). Confirm to generate the CDA."
+        footer={<><Button variant="ghost" onClick={()=>setOpen(false)}>Cancel</Button><Button onClick={()=>setOpen(false)}>Confirm</Button></>} />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body>
+</html>

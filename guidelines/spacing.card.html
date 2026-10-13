@@ -1,0 +1,16 @@
+<!-- @dsCard group="Spacing" viewport="700x220" name="Spacing scale" subtitle="4px grid — 4 / 8 / 12 / 16 / 24" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><link rel="stylesheet" href="../styles.css"/>
+<style>
+  body{margin:0;padding:20px;background:var(--background);font-family:var(--font-sans)}
+  .r{display:flex;align-items:center;gap:16px;padding:4px 0}
+  .tok{width:120px;font-family:var(--font-mono);font-size:11px;color:var(--muted-foreground)}
+  .bar{height:14px;background:var(--foreground);border-radius:2px}
+</style></head>
+<body>
+<div id="g"></div>
+<script>
+const items=[["space-1",4],["space-2",8],["space-3",12],["space-4",16],["space-5",20],["space-6",24],["space-8",32],["space-10",40],["space-12",48]];
+document.getElementById("g").innerHTML=items.map(([n,v])=>`<div class="r"><span class="tok">${n} · ${v}px</span><div class="bar" style="width:${v}px"></div></div>`).join("");
+</script>
+</body></html>

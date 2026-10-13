@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<style>
+  html,body{margin:0;height:100%;font-family:'Mona Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+  #map{position:absolute;inset:0}
+  #search-wrap{position:absolute;top:10px;left:10px;right:10px;z-index:1000;max-width:360px}
+  #search-input{width:100%;height:36px;border:1px solid #E5E7EB;border-radius:8px;padding:0 12px;font:400 13px/1 'Mona Sans';color:#101828;box-sizing:border-box;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  #search-input:focus{outline:none;border-color:#5A5FF2}
+  #suggestions{background:#fff;border:1px solid #E5E7EB;border-radius:8px;margin-top:4px;box-shadow:0 4px 12px rgba(0,0,0,.12);overflow:hidden;display:none}
+  .sugg-item{padding:8px 12px;font:400 13px/1.3 'Mona Sans';color:#101828;cursor:pointer}
+  .sugg-item:hover{background:#F5F5F5}
+  .remove-link{color:#DC2626;font:600 12px/1 'Mona Sans';cursor:pointer;text-decoration:none}
+  .leaflet-popup-content{font:400 13px/1.3 'Mona Sans';color:#101828}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="search-wrap"><input id="search-input" type="text" placeholder="Search and add a city or state, e.g. Oakland, CA" autocomplete="off"><div id="suggestions"></div></div>
+<script>
+  const params = new URLSearchParams(location.search);
+  const mode = params.get('mode') || 'view';
+  const isEdit = mode === 'edit';
+  document.getElementById('search-wrap').style.display = isEdit ? 'block' : 'none';
+
+  const map = L.map('map', { zoomControl: isEdit }).setView([35.1258, -117.9772], 10);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(map);
+  if (!isEdit) map.dragging.disable(), map.touchZoom.disable(), map.doubleClickZoom.disable(), map.scrollWheelZoom.disable(), map.boxZoom.disable(), map.keyboard.disable();
+
+  const geocodeCache = {};
+  const markers = {};
+
+  async function geocode(label) {
+    if (geocodeCache[label]) return geocodeCache[label];
+    const res = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(label));
+    const data = await res.json();
+    if (!data.length) return null;
+    const result = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
+    geocodeCache[label] = result;
+    return result;
+  }
+
+  function fitAll() {
+    const pts = Object.values(markers).map(m => m.getLatLng());
+    if (pts.length === 1) map.setView(pts[0], 11);
+    else if (pts.length > 1) map.fitBounds(L.latLngBounds(pts), { padding: [30, 30] });
+  }
+
+  async function setLocations(locations) {
+    Object.keys(markers).forEach(k => { if (!locations.includes(k)) { map.removeLayer(markers[k]); delete markers[k]; } });
+    for (const label of locations) {
+      if (markers[label]) continue;
+      const pos = await geocode(label);
+      if (!pos) continue;
+      const marker = L.marker([pos.lat, pos.lon]).addTo(map);
+      const popupHtml = isEdit
+        ? label + '<br><a class="remove-link" data-label="' + label.replace(/"/g, '&quot;') + '">Remove</a>'
+        : label;
+      marker.bindPopup(popupHtml);
+      marker.on('popupopen', () => {
+        const link = document.querySelector('.remove-link[data-label="' + label.replace(/"/g, '\\"') + '"]');
+        if (link) link.onclick = () => parent.postMessage({ type: 'removeLocation', label }, '*');
+      });
+      markers[label] = marker;
+    }
+    fitAll();
+  }
+
+  const input = document.getElementById('search-input');
+  const suggBox = document.getElementById('suggestions');
+  let debounceTimer;
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    const q = input.value.trim();
+    if (q.length < 3) { suggBox.style.display = 'none'; suggBox.innerHTML = ''; return; }
+    debounceTimer = setTimeout(async () => {
+      const res = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&q=' + encodeURIComponent(q));
+      const data = await res.json();
+      suggBox.innerHTML = '';
+      if (!data.length) { suggBox.style.display = 'none'; return; }
+      data.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'sugg-item';
+        div.textContent = item.display_name;
+        div.onclick = () => {
+          const label = item.display_name.split(',').slice(0, 2).join(',').trim();
+          geocodeCache[label] = { lat: parseFloat(item.lat), lon: parseFloat(item.lon) };
+          parent.postMessage({ type: 'addLocation', label }, '*');
+          suggBox.style.display = 'none';
+          input.value = '';
+        };
+        suggBox.appendChild(div);
+      });
+      suggBox.style.display = 'block';
+    }, 350);
+  });
+  document.addEventListener('click', (e) => { if (e.target !== input) suggBox.style.display = 'none'; });
+
+  window.addEventListener('message', (e) => {
+    if (!e.data || typeof e.data !== 'object') return;
+    if (e.data.type === 'setLocations') setLocations(e.data.locations || []);
+  });
+
+  parent.postMessage({ type: 'ready' }, '*');
+</script>
+</body>
+</html>

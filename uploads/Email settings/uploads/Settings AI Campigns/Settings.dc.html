@@ -1,0 +1,1827 @@
+<!-- @template name="Settings template" description="Radius agent Settings — email signature editor, tabs, and templates list" -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="./ds-base.js"></script>
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/fig-tokens.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/colors.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/typography.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/radius.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/tokens/base.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/components/components.css">
+<link rel="stylesheet" href="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/styles.css">
+<script src="_ds/radius-ui-design-system-c7220bb1-3534-4549-94e9-dd1c4d80b981/_ds_bundle.js"></script>
+<style>
+/* AI Campaign panel — tokenised against Radius UI 3.0.
+   Local aliases: indigo halo (Mel accent) and Mel-tinted wash for the AI surfaces. */
+.aic-info{position:relative;display:inline-flex;align-items:center;justify-content:center;outline:none}
+.aic-info__i{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:999px;border:1px solid #D4D4D4;color:#737373;font:600 10px/1 Inter;cursor:help;background:var(--background);transition:border-color .12s ease,color .12s ease}
+.aic-info:hover .aic-info__i,.aic-info:focus-visible .aic-info__i{border-color:var(--brand-indigo);color:var(--brand-indigo)}
+.aic-info__card{position:absolute;left:50%;bottom:calc(100% + 8px);transform:translateX(-50%) translateY(4px);width:240px;font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:var(--text-body-sm);line-height:1.45;color:var(--foreground);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .14s ease,transform .14s ease,visibility .14s ease;z-index:60;text-align:left;white-space:normal}
+.aic-info:hover .aic-info__card,.aic-info:focus-visible .aic-info__card{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+
+.aic-scope{
+  --aic-indigo: var(--brand-indigo);
+  --aic-indigo-ring: color-mix(in srgb, var(--brand-indigo) 18%, transparent);
+  --aic-indigo-wash: var(--tint-indigo-bg);
+  --aic-indigo-wash-soft: color-mix(in srgb, var(--brand-indigo) 6%, var(--background));
+  --aic-indigo-border: color-mix(in srgb, var(--brand-indigo) 24%, var(--border));
+  --aic-indigo-fg: var(--tint-indigo-fg);
+}
+/* Indigo primary swap for the AI Campaign CTA (Mel-driven surface). */
+.aic-indigo-cta{--primary: var(--brand-indigo); --primary-foreground: var(--white)}
+
+/* Compact table row height */
+.aic-table-wrap .rds-table tbody td{height:40px}
+
+/* Coming-soon section strip inside the campaign sheet */
+.aic-cs-strip{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);margin:calc(var(--space-5) * -1) calc(var(--space-6) * -1) var(--space-4);padding:var(--space-3) var(--space-6);background:linear-gradient(90deg, color-mix(in srgb, var(--brand-indigo) 6%, var(--background)) 0%, color-mix(in srgb, var(--status-green) 6%, var(--background)) 100%);border-bottom:1px solid var(--border)}
+.aic-cs-strip .ttl{font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:var(--text-body-sm);line-height:1.3;color:var(--foreground)}
+.aic-cs-strip .badge{display:inline-flex;align-items:center;gap:var(--space-1-5);padding:2px var(--space-2);background:var(--background);border:1px solid var(--border);border-radius:var(--radius-badge);font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:var(--text-caption);line-height:1;color:var(--muted-foreground)}
+.aic-cs-strip .badge .dot{width:6px;height:6px;border-radius:var(--radius-full);background:var(--status-green)}
+
+/* Compact borderless cadence trigger for DS DropdownMenu */
+.aic-cad-select{display:inline-flex}
+.aic-cad-trigger{height:28px;padding:0 6px 0 10px;background:transparent;border:0;box-shadow:none;font:600 13px/1 Inter;color:#0A0A0A;display:inline-flex;align-items:center;gap:4px;border-radius:6px;cursor:pointer}
+.aic-cad-trigger:hover{background:#F5F5F5}
+.aic-cad-trigger svg{color:#737373}
+
+/* Wider New-campaign side panel */
+.aic-camp-sheet{width:520px !important;max-width:94vw !important}
+.aic-camp-sheet .rds-sheet__body{padding:var(--space-5) var(--space-6)}
+.aic-camp-sheet .rds-sheet__header{padding:var(--space-4) var(--space-6);position:relative}
+.aic-sheet-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:8px;background:transparent;border:1px solid transparent;color:var(--muted-foreground);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;transition:background .12s ease, color .12s ease, border-color .12s ease}
+.aic-sheet-close:hover{background:var(--neutral-100, #F5F5F5);color:var(--foreground);border-color:var(--border)}
+.aic-camp-sheet .rds-sheet__title{font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:var(--text-body-lg);line-height:var(--leading-body-lg);color:var(--foreground)}
+.aic-camp-sheet .rds-sheet__desc{font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:var(--text-body-sm);line-height:var(--leading-body-sm);color:var(--muted-foreground);margin-top:2px}
+
+.aic-field-label{font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:var(--text-body-sm);line-height:1;color:var(--foreground);display:block;margin-bottom:var(--space-2)}
+.aic-field-req{color:var(--destructive);margin-left:2px}
+.aic-field-help{font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:var(--text-caption);line-height:1.4;color:var(--muted-foreground);margin:var(--space-1-5) 0 0}
+
+.aic-block{border:1px solid var(--border);border-radius:var(--radius-card);padding:var(--space-4);background:var(--card)}
+.aic-block + .aic-block{margin-top:14px}
+.aic-block-hd{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);margin-bottom:var(--space-2-5)}
+.aic-block-hd[data-collapsed="true"]{margin-bottom:0}
+.aic-block-hd .ttl{font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:var(--text-body-sm);line-height:1.3;color:var(--foreground)}
+.aic-block-hd .req{color:var(--destructive)}
+.aic-cs{color:var(--status-green);font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:var(--text-caption);line-height:1}
+
+/* Segmented (Only Me / All Agents / Select Agents) */
+.aic-seg{display:inline-flex;background:var(--muted);border-radius:var(--radius-button);padding:3px;gap:2px}
+.aic-seg button{height:28px;padding:0 var(--space-3);background:transparent;border:0;border-radius:var(--radius-input);font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:var(--text-body-sm);line-height:1;color:var(--neutral-600);cursor:pointer;transition:background .12s ease,color .12s ease}
+.aic-seg button:hover{color:var(--foreground)}
+.aic-seg button[data-on="true"]{background:var(--background);color:var(--foreground);box-shadow:var(--shadow-xs)}
+
+/* Agent card */
+.aic-agent{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-3-5, 14px);background:var(--aic-indigo-wash-soft);border:1px solid var(--aic-indigo-wash);border-radius:var(--radius-button);margin-top:var(--space-3)}
+.aic-agent .av{width:32px;height:32px;border-radius:var(--radius-full);background:var(--brand-indigo);color:var(--white);display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:var(--text-caption);line-height:1;flex:none}
+.aic-agent .nm{font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:var(--text-body-sm);line-height:1.3;color:var(--foreground)}
+.aic-agent .sub{font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:var(--text-caption);line-height:1.4;color:var(--muted-foreground);margin-top:1px}
+
+/* Search-style client input */
+.aic-clientsearch{position:relative;height:36px}
+.aic-clientsearch input{width:100%;height:36px;padding:0 36px 0 34px;background:var(--background);border:1px solid var(--input);border-radius:var(--radius-input);font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:var(--text-body);line-height:1;color:var(--foreground);outline:none;box-shadow:var(--shadow-xs);transition:border-color .12s ease,box-shadow .12s ease}
+.aic-clientsearch input::placeholder{color:var(--muted-foreground)}
+.aic-clientsearch input:focus{border-color:var(--brand-indigo);box-shadow:0 0 0 3px var(--aic-indigo-ring)}
+.aic-clientsearch .lic{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted-foreground);pointer-events:none}
+.aic-clientsearch .ric{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted-foreground);pointer-events:none}
+/* Centered variant: icon + text sit as a single group centered in the field, chevron stays pinned right */
+.aic-clientsearch--centered{display:flex;align-items:center;justify-content:center;background:var(--background);border:1px solid var(--input);border-radius:var(--radius-input);padding:0 36px 0 12px;gap:8px}
+.aic-clientsearch--centered:focus-within{border-color:var(--brand-indigo);box-shadow:0 0 0 3px var(--aic-indigo-ring)}
+.aic-clientsearch--centered .lic{position:static;transform:none;display:inline-flex;align-items:center;flex:none}
+.aic-clientsearch--centered input{width:auto;flex:0 1 auto;min-width:0;height:34px;padding:0;border:none;background:transparent;box-shadow:none;text-align:left}
+.aic-clientsearch--centered input:focus{border:none;box-shadow:none}
+
+/* Or divider */
+.aic-or{display:flex;align-items:center;gap:var(--space-3);margin:var(--space-3) 0;color:var(--neutral-400);font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:11px;line-height:1;letter-spacing:.06em;text-transform:uppercase}
+.aic-or:before,.aic-or:after{content:"";flex:1;height:1px;background:var(--border)}
+
+/* Channel chip color coding — in-app cyan, email indigo, text pink. */
+.aic-mstones .aic-info__card{bottom:auto;top:calc(100% + 8px);left:0;transform:translateX(0) translateY(4px);width:220px;white-space:normal}
+.aic-mstones .aic-info:hover .aic-info__card,.aic-mstones .aic-info:focus-visible .aic-info__card{transform:translateX(0) translateY(0)}
+.aic-mstone[data-channel="InApp"]:hover{color:#0EA5E9;border-color:color-mix(in srgb,#0EA5E9 55%,var(--border));background:color-mix(in srgb,#0EA5E9 10%,#fff)}
+.aic-mstone[data-channel="InApp"][data-on="true"]{background:#0EA5E9;border-color:#0EA5E9;color:#fff}
+.aic-mstone[data-channel="Email"]:hover{color:#8B5CF6;border-color:color-mix(in srgb,#8B5CF6 55%,var(--border));background:color-mix(in srgb,#8B5CF6 14%,#fff)}
+.aic-mstone[data-channel="Email"][data-on="true"]{background:#8B5CF6;border-color:#8B5CF6;color:#fff}
+.aic-mstone[data-channel="Text"]:hover{color:#EC4899;border-color:color-mix(in srgb,#EC4899 55%,var(--border));background:color-mix(in srgb,#EC4899 10%,#fff)}
+.aic-mstone[data-channel="Text"][data-on="true"]{background:#EC4899;border-color:#EC4899;color:#fff}
+
+/* Reminder / channel chips */
+.aic-chip{display:inline-flex;align-items:center;gap:var(--space-1-5);padding:var(--space-1-5) var(--space-3);background:var(--background);border:1px solid var(--aic-indigo-border);border-radius:var(--radius-full);font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:var(--text-body-sm);line-height:1;color:var(--brand-indigo);cursor:pointer;transition:background .12s ease,border-color .12s ease,color .12s ease}
+.aic-chip:hover{background:var(--aic-indigo-wash-soft)}
+.aic-chip[data-on="true"]{background:var(--brand-indigo);border-color:var(--brand-indigo);color:var(--white)}
+.aic-chip[data-disabled="true"]{background:var(--muted);border-color:var(--border);color:var(--neutral-400);cursor:not-allowed}
+.aic-chip .ic{display:inline-flex;align-items:center;justify-content:center}
+
+/* Compact audience dropdown */
+.aic-drop{position:relative}
+.aic-drop .trg{width:100%;display:flex;align-items:center;justify-content:space-between;gap:var(--space-2-5);padding:var(--space-2-5) var(--space-3);background:var(--background);border:1px solid var(--input);border-radius:var(--radius-dropdown);cursor:pointer;transition:border-color .12s ease,box-shadow .12s ease;text-align:left}
+.aic-drop .trg:hover{border-color:var(--neutral-300)}
+.aic-drop .trg[data-open="true"]{border-color:var(--brand-indigo);box-shadow:0 0 0 3px var(--aic-indigo-ring)}
+.aic-drop .trg .lbl{font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:var(--text-body-sm);line-height:1.3;color:var(--foreground)}
+.aic-drop .trg .sub{font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:var(--text-caption);line-height:1.4;color:var(--muted-foreground);margin-top:1px}
+.aic-drop .chev{color:var(--muted-foreground);transition:transform .18s ease}
+.aic-drop .trg[data-open="true"] .chev{transform:rotate(180deg)}
+.aic-drop .menu{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--popover);border:1px solid var(--border);border-radius:var(--radius-dropdown);box-shadow:var(--shadow-md);z-index:20;overflow:hidden;padding:var(--space-1-5)}
+.aic-drop .menu .grp{padding:var(--space-1-5) var(--space-2-5) var(--space-1);font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:10.5px;line-height:1;color:var(--neutral-400);letter-spacing:.08em;text-transform:uppercase}
+.aic-drop .menu .item{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2-5);padding:var(--space-2) var(--space-2-5);border-radius:var(--radius-input);cursor:pointer;transition:background .12s ease}
+.aic-drop .menu .item:hover{background:var(--muted)}
+.aic-drop .menu .item[data-on="true"]{background:var(--aic-indigo-wash-soft)}
+.aic-drop .menu .item .lbl{font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:var(--text-body-sm);line-height:1.3;color:var(--foreground)}
+.aic-drop .menu .item .sub{font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:11.5px;line-height:1.35;color:var(--muted-foreground);margin-top:1px}
+.aic-drop .menu .item .ck{color:var(--brand-indigo);opacity:0}
+.aic-drop .menu .item[data-on="true"] .ck{opacity:1}
+.aic-drop .menu .divider{height:1px;background:var(--border);margin:var(--space-1) 0}
+
+/* Mel banner — deep-indigo gradient card, full-width like sibling sections. */
+.aic-mel-banner{position:relative;width:100%;padding:0 2px;border-radius:var(--radius-card);
+  background:linear-gradient(135deg,#10081F 0%,#2D1B69 50%,#10081F 100%);
+  border:1px solid color-mix(in srgb,#5A5FF2 30%, #10081F);
+  color:#EDEBFF;
+  overflow:hidden;
+  display:flex;align-items:stretch;gap:4px;box-shadow:0 6px 20px rgba(16,8,31,.25)}
+.aic-mel-banner .mel-glow{width:88px;height:88px;flex:none;object-fit:contain;pointer-events:none;user-select:none;margin:-14px -18px -14px -10px;align-self:center}
+.aic-mel-banner .body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;padding-right:10px}
+.aic-mel-banner .close{position:absolute;top:10px;right:12px;width:20px;height:20px;background:transparent;color:#FFFFFF;border:0;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity .12s ease;padding:0;opacity:.75;z-index:2}
+.aic-mel-banner .close:hover{opacity:1;background:transparent}
+.aic-mel-banner .close{opacity:0;transition:opacity .15s ease}
+.aic-mel-banner:hover .close,.aic-mel-banner .close:focus-visible{opacity:.85}
+
+/* Client autocomplete */
+.aic-selchips{display:flex;flex-wrap:wrap;gap:var(--space-1-5);margin-bottom:var(--space-2)}
+.aic-selchip{display:inline-flex;align-items:center;gap:var(--space-1-5);padding:var(--space-1) var(--space-1-5) var(--space-1) var(--space-2-5);background:var(--aic-indigo-wash);border:1px solid color-mix(in srgb, var(--brand-indigo) 22%, var(--border));border-radius:var(--radius-full);font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:var(--text-caption);line-height:1;color:var(--aic-indigo-fg);max-width:100%}
+.aic-selchip .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px}
+.aic-selchip .x{width:18px;height:18px;border-radius:var(--radius-full);background:transparent;border:0;color:var(--neutral-600);display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.aic-selchip .x:hover{background:color-mix(in srgb, var(--brand-indigo) 14%, transparent);color:var(--foreground)}
+.aic-ac{position:relative}
+.aic-ac-menu{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--popover);border:1px solid var(--border);border-radius:var(--radius-dropdown);box-shadow:var(--shadow-md);z-index:30;max-height:280px;overflow:auto;padding:var(--space-1-5)}
+.aic-ac-item{display:flex;align-items:center;gap:var(--space-2-5);padding:var(--space-2) var(--space-2-5);border-radius:var(--radius-input);cursor:pointer;transition:background .12s ease}
+.aic-ac-item:hover{background:var(--muted)}
+.aic-ac-item .av{width:26px;height:26px;border-radius:var(--radius-full);background:var(--neutral-100);color:var(--neutral-600);display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:10px;line-height:1;flex:none}
+.aic-ac-item .txt{min-width:0;flex:1}
+.aic-ac-item .nm{font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:var(--text-body-sm);line-height:1.3;color:var(--foreground);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aic-ac-item .meta{font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:11.5px;line-height:1.4;color:var(--muted-foreground);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aic-ac-item .tag{font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:10.5px;line-height:1;color:var(--brand-indigo);background:var(--aic-indigo-wash);padding:3px var(--space-1-5);border-radius:var(--radius-sm);flex:none}
+.aic-ac-item .added{font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:11px;line-height:1;color:var(--status-green);flex:none}
+.aic-ac-empty{padding:var(--space-3-5, 14px);text-align:center;font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:var(--text-body-sm);line-height:1.4;color:var(--muted-foreground)}
+.aic-ac-empty b{color:var(--foreground);font-weight:var(--font-weight-semibold)}
+.aic-ac-footer{border-top:1px solid var(--border);padding:var(--space-2) var(--space-2-5);font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:11.5px;line-height:1;color:var(--neutral-400);display:flex;align-items:center;justify-content:space-between}
+.aic-ac-footer .a{color:var(--brand-indigo);background:transparent;border:0;cursor:pointer;font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:11.5px;line-height:1;padding:0}
+.aic-ac-footer .a:hover{text-decoration:underline}
+
+/* Milestones */
+.aic-mstones{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:2px}
+.aic-mstone{display:inline-flex;align-items:center;gap:var(--space-1-5);padding:var(--space-1-5) var(--space-3);background:var(--background);border:1px solid var(--border);border-radius:var(--radius-full);font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:var(--text-body-sm);line-height:1;color:var(--neutral-600);cursor:pointer;transition:background .12s ease,border-color .12s ease,color .12s ease}
+.aic-mstone:hover{background:var(--neutral-50);color:var(--foreground)}
+.aic-mstone[data-on="true"]{background:var(--brand-indigo);border-color:var(--brand-indigo);color:var(--white)}
+.aic-mstone .n{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:var(--radius-full);background:var(--muted);color:var(--muted-foreground);font-family:var(--font-mono);font-weight:var(--font-weight-semibold);font-size:10px;line-height:1}
+.aic-mstone[data-on="true"] .n{background:color-mix(in srgb, var(--white) 22%, transparent);color:var(--white)}
+
+.aic-mel-banner .head{display:flex;align-items:center;gap:var(--space-2-5);margin-bottom:var(--space-2-5)}
+.aic-mel-banner .mel-badge{width:26px;height:26px;border-radius:var(--radius-md);background:var(--mel-gradient);display:inline-flex;align-items:center;justify-content:center;color:var(--white);font-family:var(--font-sans);font-weight:var(--font-weight-bold);font-size:var(--text-caption);line-height:1;box-shadow:0 2px 8px color-mix(in srgb, var(--brand-indigo) 35%, transparent)}
+.aic-mel-banner .ttl{font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:15px;line-height:1.3;color:#FFFFFF;letter-spacing:-0.01em}
+.aic-mel-banner .sub{font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:var(--text-caption);line-height:1.5;color:rgba(237,235,255,.72);margin-top:2px}
+
+/* Goal form inside dark banner */
+.aic-mel-banner .aic-goal{all:unset;display:flex;flex-direction:column;gap:0;width:100%;box-sizing:border-box}
+.aic-mel-banner .aic-goal .goal-input{width:100%;background:transparent;border:0;outline:none;color:#FFFFFF;font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:15px;line-height:1.4;padding:2px 0;box-sizing:border-box}
+.aic-mel-banner .aic-goal .goal-input::placeholder{color:rgba(237,235,255,.55)}
+.aic-mel-banner .aic-goal .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.aic-mel-banner .aic-goal .opts{display:flex;align-items:center;gap:16px;flex-wrap:wrap;min-width:0}
+.aic-mel-banner .aic-goal .opt{all:unset;display:inline-flex;align-items:center;gap:8px;color:#FFFFFF;font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:13px;line-height:1;cursor:pointer;opacity:.92;transition:opacity .12s ease}
+.aic-mel-banner .aic-goal .opt:hover{opacity:1}
+.aic-mel-banner .aic-goal .actions{display:flex;align-items:center;gap:10px;flex:none}
+.aic-mel-banner .aic-goal .mic{all:unset;width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;color:#FFFFFF;cursor:pointer;opacity:.85;transition:opacity .12s ease}
+.aic-mel-banner .aic-goal .mic:hover{opacity:1}
+.aic-mel-banner .aic-goal .send{all:unset;width:36px;height:36px;box-sizing:border-box;border-radius:10px;background:rgba(90,95,242,.55);color:#FFFFFF;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background .12s ease,transform .1s ease}
+.aic-mel-banner .aic-goal .send:hover{background:rgba(90,95,242,.85)}
+.aic-mel-banner .aic-goal .send:active{transform:scale(.96)}
+.aic-mel-banner .aic-goal .send:disabled{background:rgba(255,255,255,.10);color:rgba(237,235,255,.45);cursor:not-allowed}
+.aic-mel-banner .aic-goal .spinner{width:14px;height:14px;border-radius:var(--radius-full);border:2px solid rgba(255,255,255,.35);border-top-color:#FFFFFF;animation:spin .7s linear infinite}
+
+.aic-goal{position:relative;display:flex;align-items:center;gap:var(--space-1-5);background:var(--background);border:1px solid color-mix(in srgb, var(--brand-indigo) 22%, var(--border));border-radius:var(--radius-full);padding:var(--space-1) var(--space-1) var(--space-1) var(--space-3-5, 14px);box-shadow:var(--shadow-xs);transition:border-color .12s ease,box-shadow .12s ease}
+.aic-goal:focus-within{border-color:var(--brand-indigo);box-shadow:0 0 0 3px var(--aic-indigo-ring)}
+.aic-goal input{flex:1;height:34px;border:0;background:transparent;outline:none;font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:var(--text-body);line-height:1;color:var(--foreground)}
+.aic-goal input::placeholder{color:var(--muted-foreground)}
+.aic-goal .send{width:32px;height:32px;border-radius:var(--radius-full);border:0;background:var(--brand-indigo);color:var(--white);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:filter .12s ease,transform .1s ease}
+.aic-goal .send:hover{filter:brightness(.92)}
+.aic-goal .send:active{transform:scale(.94)}
+.aic-goal .send:disabled{background:var(--neutral-200);color:var(--neutral-400);cursor:not-allowed}
+.aic-goal .spinner{width:14px;height:14px;border-radius:var(--radius-full);border:2px solid color-mix(in srgb, var(--white) 35%, transparent);border-top-color:var(--white);animation:spin .7s linear infinite}
+.aic-goal-hint{margin:var(--space-2) var(--space-1) 0;font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:11.5px;line-height:1.4;color:var(--muted-foreground)}
+.aic-mel-drafted{margin-top:var(--space-2-5);padding:var(--space-2-5) var(--space-3);border-radius:var(--radius-dropdown);background:color-mix(in srgb, var(--background) 70%, transparent);border:1px dashed color-mix(in srgb, var(--brand-indigo) 30%, var(--border));font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:var(--text-body-sm);line-height:1.5;color:var(--foreground);display:flex;gap:var(--space-2);align-items:flex-start}
+.aic-mel-drafted svg{color:var(--brand-indigo);flex:none;margin-top:1px}
+
+/* Prospecting instructions */
+.aic-tpl-chip{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;gap:var(--space-1-5);padding:6px 12px;border:1px solid transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(135deg,#5A5FF2 0%,#8B7BF0 45%,#FF7A59 100%) border-box;border-radius:var(--radius-full);font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:var(--text-caption);line-height:1;color:var(--foreground);cursor:pointer;transition:filter .12s ease,transform .1s ease,box-shadow .12s ease}
+.aic-tpl-chip:hover{filter:brightness(.98);box-shadow:0 1px 2px rgba(90,95,242,.10)}
+.aic-tpl-chip:active{transform:scale(.98)}
+.aic-tpl-chip[data-on="true"]{background:linear-gradient(135deg,color-mix(in srgb,#5A5FF2 8%,#fff),color-mix(in srgb,#FF7A59 8%,#fff)) padding-box,linear-gradient(135deg,#5A5FF2 0%,#8B7BF0 45%,#FF7A59 100%) border-box}
+.aic-tpl-chip .glyph{width:14px;height:14px;flex:none;display:inline-block}
+
+/* Textarea — extends .rds-input.rds-textarea, indigo focus for Mel context. */
+.rds-input.aic-textarea{min-height:140px;height:140px}
+.aic-textarea:focus{border-color:var(--brand-indigo);box-shadow:0 0 0 3px var(--aic-indigo-ring)}
+.aic-count{display:block;text-align:right;font-family:var(--font-mono);font-weight:var(--font-weight-regular);font-size:11.5px;line-height:1;color:var(--neutral-400);margin-top:var(--space-1-5)}
+
+/* Dropzone */
+.aic-drop-zone{border:1.5px dashed color-mix(in srgb, var(--brand-indigo) 30%, var(--border));border-radius:var(--radius-card);background:color-mix(in srgb, var(--brand-indigo) 3%, var(--background));padding:var(--space-6) var(--space-5);text-align:center;transition:border-color .12s ease,background .12s ease}
+.aic-drop-zone:hover{border-color:var(--brand-indigo);background:var(--aic-indigo-wash-soft)}
+.aic-drop-zone .icn{width:44px;height:44px;border-radius:var(--radius-full);background:var(--aic-indigo-wash);color:var(--brand-indigo);display:inline-flex;align-items:center;justify-content:center;margin-bottom:var(--space-2)}
+.aic-drop-zone .t1{font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:var(--text-body-sm);line-height:1.3;color:var(--foreground)}
+.aic-drop-zone .t2{font-family:var(--font-sans);font-weight:var(--font-weight-regular);font-size:var(--text-caption);line-height:1.4;color:var(--muted-foreground);margin-top:2px}
+.aic-drop-zone .br{display:inline-flex;align-items:center;gap:var(--space-1-5);height:var(--control-h-sm);padding:0 var(--space-3-5, 14px);background:var(--brand-indigo);color:var(--white);border:0;border-radius:var(--radius-input);font-family:var(--font-sans);font-weight:var(--font-weight-semibold);font-size:var(--text-body-sm);line-height:1;cursor:pointer;margin-top:var(--space-2-5);transition:filter .12s ease,transform .1s ease}
+.aic-drop-zone .br:hover{filter:brightness(.92)}
+.aic-drop-zone .br:active{transform:scale(.98)}
+.aic-drop-zone .divmini{display:block;font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:11px;line-height:1;color:var(--neutral-400);letter-spacing:.06em;margin:var(--space-2) 0 2px}
+
+.aic-file-row{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-2)}
+.aic-file-item{position:relative;display:flex;flex-direction:column;gap:0;padding:6px;background:var(--background);border:1px solid var(--border);border-radius:10px;width:140px;box-shadow:var(--shadow-xs, 0 1px 2px rgba(0,0,0,.04));transition:border-color .12s ease, box-shadow .12s ease;flex:none}
+.aic-file-item:hover{border-color:color-mix(in srgb, var(--brand-indigo) 35%, var(--border));box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.aic-file-item .thumb{width:100%;aspect-ratio:16/9;border-radius:10px;background:linear-gradient(180deg,#F8F8FA 0%,#EFEFF4 100%);border:1px solid #F0F0F3;display:block;overflow:hidden;position:relative}
+.aic-file-item .thumb::before{content:"";position:absolute;left:10px;right:10px;top:8px;bottom:8px;background:#FFFFFF;border:1px solid #EAEAEE;border-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.aic-file-item .thumb::after{content:"";position:absolute;left:18px;right:18px;top:14px;height:2px;border-radius:2px;background:#E5E5EA;box-shadow:0 5px 0 #EDEDF1, 0 10px 0 #EDEDF1, 0 15px 0 #EDEDF1}
+.aic-file-item .row{display:flex;align-items:center;gap:6px;padding:6px 2px 2px}
+.aic-file-item .rm{position:absolute;top:10px;right:10px;width:18px;height:18px;background:rgba(255,255,255,.92);border:1px solid var(--border);border-radius:999px;color:var(--muted-foreground);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;opacity:0;transition:opacity .12s ease}
+.aic-file-item:hover .rm,.aic-file-item .rm:focus-visible{opacity:1}
+.aic-file-item .rm:hover{color:var(--destructive);border-color:color-mix(in srgb, var(--destructive) 40%, var(--border))}
+.aic-file-add{position:sticky;right:0;display:inline-flex;flex:none;align-self:stretch;background:linear-gradient(90deg, rgba(255,255,255,0) 0%, var(--background) 24%);padding-left:12px;z-index:1}
+.aic-file-add__btn{width:140px;padding:0;background:var(--background);border:1px dashed color-mix(in srgb, var(--brand-indigo) 45%, var(--border));border-radius:10px;color:var(--brand-indigo);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background .12s ease, border-color .12s ease;align-self:stretch;min-height:100%}
+.aic-file-add__btn:hover{background:color-mix(in srgb, var(--brand-indigo) 8%, var(--background));border-style:solid}
+.aic-file-add .aic-info__card{bottom:auto;top:calc(100% + 8px);left:auto;right:0;transform:translateX(0) translateY(4px);width:220px;white-space:normal}
+.aic-file-add:hover .aic-info__card,.aic-file-add:focus-visible .aic-info__card{opacity:1;visibility:visible;transform:translateX(0) translateY(0)}
+.aic-hd-add{position:relative;display:inline-flex;cursor:pointer}
+.aic-hd-add__btn{width:22px;height:22px;padding:0;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--brand-indigo);display:inline-flex;align-items:center;justify-content:center;transition:background .12s ease, border-color .12s ease}
+.aic-hd-add:hover .aic-hd-add__btn,.aic-hd-add:focus-visible .aic-hd-add__btn{background:color-mix(in srgb, var(--brand-indigo) 8%, var(--background));border-color:color-mix(in srgb, var(--brand-indigo) 45%, var(--border))}
+.aic-hd-add .aic-info__card{bottom:calc(100% + 8px);top:auto;left:auto;right:0;transform:translateX(0) translateY(4px);width:240px;white-space:normal}
+.aic-count-chip{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:18px;padding:0 6px;margin:0 8px;background:var(--neutral-100, #F5F5F5);border-radius:999px;font-family:var(--font-mono);font-weight:var(--font-weight-medium);font-size:10.5px;line-height:1;color:var(--muted-foreground);vertical-align:middle}
+.aic-info--inline{margin-left:2px}
+.aic-ttl-spacer{flex:1}
+.aic-hd-add{margin-right:6px}
+.aic-hd-add__close{margin-left:8px;background:transparent;border:0;color:currentColor;opacity:.7;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:2px;border-radius:4px;flex:none}
+.aic-hd-add__close:hover{opacity:1;background:rgba(255,255,255,.08)}
+.aic-hd-add .aic-info__card{display:flex;align-items:flex-start;gap:4px;width:240px;pointer-events:auto}
+.aic-hd-add__text{flex:1;min-width:0}
+.aic-hd-add:hover .aic-info__card,.aic-hd-add:focus-visible .aic-info__card,.aic-hd-add--hint .aic-info__card{opacity:1;visibility:visible;transform:translateX(0) translateY(-4px)}
+.aic-hd-add--hint .aic-hd-add__btn{background:color-mix(in srgb, var(--brand-indigo) 12%, var(--background));border-color:color-mix(in srgb, var(--brand-indigo) 55%, var(--border));animation:aicHdPulse 1.6s ease-in-out infinite}
+@keyframes aicHdPulse{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb, var(--brand-indigo) 45%, transparent)}50%{box-shadow:0 0 0 4px color-mix(in srgb, var(--brand-indigo) 0%, transparent)}}
+.aic-file-carousel{position:relative;margin-top:var(--space-2)}
+.aic-file-carousel .aic-file-row{margin-top:0;flex-wrap:nowrap;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:2px 0}
+.aic-file-carousel .aic-file-row::-webkit-scrollbar{display:none}
+.aic-file-carousel .aic-file-item{flex:none}
+.aic-file-nav{position:absolute;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:999px;background:var(--background);border:1px solid var(--border);box-shadow:0 2px 6px rgba(0,0,0,.08);display:inline-flex;align-items:center;justify-content:center;color:var(--foreground);cursor:pointer;z-index:2;opacity:0;transition:opacity .12s ease, background .12s ease}
+.aic-file-nav:hover{background:var(--neutral-50)}
+.aic-file-nav[data-dir="prev"]{left:-10px}
+.aic-file-nav[data-dir="next"]{right:-10px}
+.aic-file-carousel:hover .aic-file-nav,.aic-file-nav:focus-visible{opacity:1}
+.aic-file-item .ico{width:18px;height:18px;border-radius:4px;background:color-mix(in srgb, var(--brand-indigo) 10%, transparent);display:inline-flex;align-items:center;justify-content:center;flex:none;color:var(--brand-indigo)}
+.aic-file-item--legacy{display:flex;align-items:center;gap:var(--space-2-5);padding:var(--space-2) var(--space-2-5);background:var(--neutral-50);border:1px solid var(--border);border-radius:var(--radius-input);margin-top:var(--space-2)}
+.aic-file-item .nm{flex:1;min-width:0;font-family:var(--font-sans);font-weight:var(--font-weight-medium);font-size:11.5px;line-height:1.3;color:var(--foreground);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aic-file-item .sz{font-family:var(--font-mono);font-weight:var(--font-weight-regular);font-size:11.5px;line-height:1;color:var(--muted-foreground)}
+.aic-file-item .rm{background:transparent;border:0;color:var(--muted-foreground);cursor:pointer;padding:var(--space-1);border-radius:var(--radius-sm)}
+.aic-file-item .rm:hover{background:var(--muted);color:var(--destructive)}
+
+.aic-sheet-footer{display:flex;align-items:center;justify-content:flex-end;gap:var(--space-2);padding:var(--space-3) var(--space-5);background:var(--background)}
+
+/* Post-close nurture switch — uses the DS .rds-switch, indigo track when checked (Mel accent). */
+.aic-switch-indigo:checked{background:var(--brand-indigo)}
+.aic-switch-indigo:focus-visible{box-shadow:0 0 0 3px var(--aic-indigo-ring)}
+</style>
+<style>
+body{margin:0;background:#fafafa;font-family:Inter,system-ui,sans-serif;color:#0a0a0a}
+*{box-sizing:border-box}
+a{color:#171717;text-decoration:underline;text-underline-offset:2px}
+a:hover{color:#5A5FF2}
+button{font-family:inherit}
+.figrail{width:36px;height:36px;border-radius:8px;background:transparent;display:flex;align-items:center;justify-content:center;padding:3px;box-sizing:border-box;color:#2A2A2A;cursor:pointer;border:0;transition:background .12s ease}
+.figrail:hover{background:rgba(255,255,255,.18)}
+.figrail[data-active="true"]{background:#fff}
+.figrail img{display:block;width:30px;height:30px}
+.topbar{height:56px;background:#fff;border-bottom:1px solid #e5e5e5;display:flex;align-items:center;gap:16px;padding:0 22px;flex:none}
+.tb-search{position:relative;flex:1;max-width:420px;height:32px}
+.tb-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#737373;pointer-events:none}
+.tb-search input{width:100%;height:32px;padding:0 12px 0 32px;background:#fff;border:1px solid #e5e5e5;border-radius:8px;font:400 13px/1 Inter;color:#171717;outline:none;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.tb-search input:focus{border-color:#a3a3a3;box-shadow:0 0 0 3px rgba(163,163,163,.15)}
+.tb-icon-btn{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:#fff;border:1px solid #e5e5e5;border-radius:8px;color:#525252;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:background .12s ease}
+.tb-icon-btn:hover{background:#fafafa;color:#171717}
+.tb-profile{display:inline-flex;align-items:center;gap:8px;padding:4px 10px 4px 4px;background:#fff;border:1px solid #e5e5e5;border-radius:999px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:background .12s ease}
+.tb-profile:hover{background:#fafafa}
+.tb-profile .avc{width:24px;height:24px;border-radius:50%;background:#e5e5e5;color:#525252;display:flex;align-items:center;justify-content:center;font:600 10px/1 Inter;flex:none}
+.tb-profile .nm{font:500 12.5px/1 Inter;color:#171717}
+.tb-wordmark{height:18px;display:block}
+.tb-div{width:1px;height:22px;background:#e5e5e5}
+.tab-btn{padding:10px 16px 12px;font:500 15px/1 Inter;color:#737373;background:transparent;border:0;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color .12s ease,border-color .12s ease}
+.tab-btn:hover{color:#171717}
+.tab-btn[data-on="true"]{color:#5A5FF2;border-bottom-color:#5A5FF2;font-weight:500}
+.tb{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;border-radius:6px;color:#525252;cursor:pointer;transition:background .12s ease}
+.tb:hover{background:#f5f5f5;color:#171717}
+.tb[data-on="true"]{background:#e5e5e5;color:#171717}
+.tb-sel{height:28px;display:inline-flex;align-items:center;gap:4px;padding:0 8px;background:transparent;border:0;border-radius:6px;font:500 12px/1 Inter;color:#525252;cursor:pointer;transition:background .12s ease}
+.tb-sel:hover{background:#f5f5f5;color:#171717}
+.tb-div{width:1px;height:16px;background:#e5e5e5;margin:0 4px}
+.editor{min-height:96px;padding:10px 12px;font:400 14px/1.55 Inter;color:#171717;outline:none;overflow-y:auto;max-height:200px}
+.editor:empty:before{content:"Add your email signature…";color:#a3a3a3}
+.editor a{color:#5A5FF2}
+.btn-p{height:32px;padding:0 14px;background:#5A5FF2;color:#fafafa;border:0;border-radius:10px;font:500 13px/1 Inter;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .12s ease,transform .1s ease}
+.btn-p:hover{background:#4a4fe0}
+.btn-p:active{transform:scale(.98)}
+.btn-p:disabled{background:#e5e5e5;color:#a3a3a3;cursor:not-allowed}
+.btn-g{height:32px;padding:0 12px;background:transparent;color:#171717;border:0;border-radius:10px;font:500 13px/1 Inter;cursor:pointer;transition:background .12s ease}
+.btn-g:hover{background:#f5f5f5}
+.btn-o{height:32px;padding:0 12px;background:#fff;color:#171717;border:1px solid #e5e5e5;border-radius:10px;font:500 13px/1 Inter;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04);display:inline-flex;align-items:center;gap:6px;transition:background .12s ease}
+.btn-o:hover{background:#fafafa}
+.input{height:32px;padding:0 12px;background:#fff;border:1px solid #e5e5e5;border-radius:8px;font:400 14px/1 Inter;color:#171717;outline:none;width:100%;box-shadow:0 1px 2px rgba(0,0,0,.04);transition:border-color .12s ease,box-shadow .12s ease}
+.input:focus{border-color:#a3a3a3;box-shadow:0 0 0 3px rgba(163,163,163,.15)}
+.swx{position:relative;width:26px;height:15px;background:#e5e5e5;border-radius:26px;cursor:pointer;transition:background .12s ease;flex:none;border:0;padding:0}
+.swx:after{content:"";position:absolute;top:2px;left:2px;width:11px;height:11px;background:#fff;border-radius:50%;box-shadow:0 1px 2px rgba(0,0,0,.15);transition:transform .14s ease}
+.swx.on{background:#5A5FF2}
+.swx.on:after{transform:translateX(11px)}
+.select{height:28px;padding:0 8px;background:transparent;border:0;border-radius:6px;font:500 12px/1 Inter;color:#525252;cursor:pointer;outline:none}
+.select:hover{background:#f5f5f5;color:#171717}
+.tpl-row{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #f0f0f0;transition:background .12s ease}
+.tpl-row:last-child{border-bottom:0}
+.tpl-row:hover{background:#fafafa}
+.ic-btn{width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;border-radius:6px;color:#737373;cursor:pointer}
+.ic-btn:hover{background:#f5f5f5;color:#171717}
+.chip-tab{padding:10px 14px;font:500 13px/1 Inter;color:#737373;background:transparent;border:0;border-bottom:2px solid transparent;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:color .12s ease,border-color .12s ease}
+.chip-tab:hover{color:#171717}
+.chip-tab.on{color:#171717;border-bottom-color:#171717;font-weight:600}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Compact tooltip for row action icons */
+.mini-tt{position:relative;display:inline-flex}
+.mini-tt::after{content:attr(data-tt);position:absolute;left:50%;bottom:calc(100% + 6px);transform:translateX(-50%);background:#171717;color:#fff;font:500 11px/1.2 Inter;padding:4px 8px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s ease;z-index:20}
+.mini-tt:hover::after,.mini-tt:focus-within::after{opacity:1}
+
+/* Campaigns view */
+.aic-btn-p{height:32px;padding:0 14px;background:#5A5FF2;color:#fff;border:0;border-radius:10px;font:700 13px/1 Inter;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:filter .12s ease,transform .1s ease;white-space:nowrap}
+.aic-btn-p:hover{filter:brightness(.92)}
+.aic-btn-p:active{transform:scale(.98)}
+.aic-btn-g{height:28px;padding:0 10px;background:transparent;color:#171717;border:0;border-radius:8px;font:600 12.5px/1 Inter;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .12s ease;white-space:nowrap}
+.aic-btn-g:hover{background:#F5F5F5}
+.aic-btn-g-ic{width:28px;height:28px;padding:0;background:transparent;color:#737373;border:0;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .12s ease,color .12s ease}
+.aic-btn-g-ic:hover{background:#F5F5F5;color:#171717}
+.aic-input{height:32px;padding:0 12px 0 32px;background:#fff;border:1px solid #E5E5E5;border-radius:8px;font:400 13px/1 Inter;color:#0A0A0A;outline:none;width:220px;transition:border-color .12s ease,box-shadow .12s ease}
+.aic-input::placeholder{color:#737373}
+.aic-input:focus{border-color:#A3A3A3;box-shadow:0 0 0 3px rgba(163,163,163,.15)}
+.aic-select{height:32px;padding:0 28px 0 10px;background:#fff;border:1px solid #E5E5E5;border-radius:8px;font:400 13px/1 Inter;color:#0A0A0A;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");background-repeat:no-repeat;background-position:right 8px center;width:100px}
+.aic-swx{position:relative;width:28px;height:16px;background:#E5E5E5;border-radius:26px;cursor:pointer;transition:background .12s ease;flex:none;border:0;padding:0;display:inline-block;vertical-align:middle}
+.aic-swx:after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;background:#fff;border-radius:50%;box-shadow:0 1px 2px rgba(0,0,0,.15);transition:transform .14s ease}
+.aic-swx.on{background:#5A5FF2}
+.aic-swx.on:after{transform:translateX(12px)}
+.aic-ctab{padding:10px 2px;font:500 14px/1 Inter;color:#737373;background:transparent;border:0;border-bottom:2px solid transparent;cursor:pointer;margin-bottom:-1px;transition:color .12s ease,border-color .12s ease}
+.aic-ctab + .aic-ctab{margin-left:24px}
+.aic-ctab:hover{color:#0A0A0A}
+.aic-ctab.on{color:#0A0A0A;border-bottom-color:#0A0A0A;font-weight:600}
+.aic-table{width:100%;border-collapse:separate;border-spacing:0;font:400 13px/1.3 Inter;color:#0A0A0A;table-layout:fixed}
+.aic-table thead th{font:500 11px/1 Inter;text-transform:uppercase;letter-spacing:.04em;color:#737373;text-align:left;padding:10px 16px;border-bottom:1px solid #E5E5E5;white-space:nowrap;background:transparent}
+.aic-table tbody tr{transition:background .1s ease}
+.aic-table tbody tr:hover{background:#F5F5F5}
+.aic-table tbody td{padding:8px 16px;border-bottom:1px solid #E5E5E5;vertical-align:middle;height:40px}
+.aic-table tbody tr:last-child td{border-bottom:0}
+.aic-bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font:500 11px/1.4 Inter;white-space:nowrap}
+.aic-bdg + .aic-bdg{margin-left:4px}
+.aic-bdg-green{background:#DCFCE7;color:#166534}
+.aic-bdg-blue{background:#DBEAFE;color:#1D4ED8}
+.aic-bdg-yellow{background:#FEF9C3;color:#854D0E}
+.aic-bdg-purple{background:#F3E8FF;color:#7E22CE}
+.aic-bdg-outline{background:transparent;color:#737373;border:1px solid #E5E5E5;padding:1px 7px}
+.aic-mono{font-family:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;color:#0A0A0A}
+.aic-subt{font:400 12px/1.3 Inter;color:#737373;margin-top:2px}
+.aic-av{width:24px;height:24px;border-radius:50%;background:#F5F5F5;color:#525252;display:inline-flex;align-items:center;justify-content:center;font:600 10px/1 Inter;flex:none}
+</style>
+</helmet>
+
+<div style="height:100vh;background:#fafafa;display:flex;flex-direction:column;overflow:hidden">
+  <header style="height:56px;background:#fff;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;display:flex;flex-direction:row;padding:0 24px;justify-content:space-between;align-items:center;box-sizing:border-box;flex:none">
+    <a href="#" aria-label="Radius home" style="height:22px;display:flex;align-items:center">
+      <img src="./assets/logo-wordmark-ink.svg" alt="Radius" style="height:22px;display:block">
+    </a>
+    <button aria-label="Account menu for Vanessa Brown" style="min-width:220px;max-width:280px;height:48px;border-radius:12px;background:#fff;border:0;display:flex;flex-direction:row;gap:10px;padding:6px 10px 6px 6px;align-items:center;box-sizing:border-box;cursor:pointer">
+      <span style="width:36px;height:36px;border-radius:9999px;background:#f5f5f5;display:inline-flex;align-items:center;justify-content:center;flex:none;font:500 12px/12px Inter;letter-spacing:.24px;color:#737373">VB</span>
+      <span style="display:flex;flex-direction:column;gap:1px;align-items:flex-start;flex:1;min-width:0;text-align:left">
+        <span style="font:600 14px/16.8px Inter;color:#0a0a0a;white-space:nowrap">Vanessa Brown</span>
+        <span style="font:400 12px/15px Inter;color:#737373;white-space:nowrap">vanessa@radiusagent.com</span>
+      </span>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#737373" stroke-width="1.333" stroke-linecap="round" stroke-linejoin="round" style="flex:none">
+        <path d="M4.667 6L8 2.667 11.333 6"></path>
+        <path d="M4.667 10L8 13.333 11.333 10"></path>
+      </svg>
+    </button>
+  </header>
+
+  <div style="flex:1;display:flex;min-height:0">
+  <sc-if value="{{ sidebarOpen }}" hint-placeholder-val="{{ true }}">
+  <aside style="position:relative;width:56px;min-width:56px;height:100%;background:#7BA69E;display:flex;flex-direction:column;gap:20px;padding:14px 0;align-items:center;flex:none;box-sizing:border-box;overflow-y:auto">
+    <div role="img" aria-label="Circle" style="width:39px;height:20px;display:block;flex:none;-webkit-mask:url(./assets/fig-circle-wordmark.svg) no-repeat center/contain;mask:url(./assets/fig-circle-wordmark.svg) no-repeat center/contain;background:#ffffff"></div>
+    <img src="./assets/mel-clip.svg" alt="Mel" style="width:36px;height:36px;display:block;flex:none">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <button class="figrail" title="Dashboard"><img src="./assets/icons/presentation-chart-bar.svg" alt=""></button>
+      <button class="figrail" title="Team"><img src="./assets/icons/user-group.svg" alt=""></button>
+      <button class="figrail" title="Location"><img src="./assets/icons/map-pin.svg" alt=""></button>
+      <button class="figrail" title="Documents"><img src="./assets/icons/document.svg" alt=""></button>
+      <button class="figrail" title="Messages" style="position:relative"><img src="./assets/icons/chat.svg" alt=""><span style="position:absolute;top:-2px;right:-8px;min-width:22px;height:16px;padding:0 5px;background:#6366F1;color:#fff;font:600 10px/16px Inter;border-radius:3px;text-align:center;box-sizing:border-box">99</span></button>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <button class="figrail" title="Wallet"><img src="./assets/icons/wallet.svg" alt=""></button>
+      <button class="figrail" title="Rewards"><img src="./assets/icons/gift.svg" alt=""></button>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <button class="figrail" title="Feed"><img src="./assets/icons/rss.svg" alt=""></button>
+      <button class="figrail" title="Work"><img src="./assets/icons/briefcase.svg" alt=""></button>
+      <button class="figrail" title="Members"><img src="./assets/icons/users.svg" alt=""></button>
+      <button class="figrail" title="Broadcast"><img src="./assets/icons/speakerphone.svg" alt=""></button>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <button class="figrail" title="Support"><img src="./assets/icons/lifebuoy.svg" alt=""></button>
+      <button class="figrail" data-active="true" title="Settings"><img src="./assets/icons/cog-8-tooth.svg" alt=""></button>
+      <button class="figrail" title="Statistics"><img src="./assets/icons/chart-bar.svg" alt=""></button>
+    </div>
+  </aside>
+  </sc-if>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+      <div style="padding:12px 32px 0;background:#fff;border-bottom:1px solid #e5e5e5">
+        <div style="display:flex;align-items:center;gap:10px;margin:0 0 8px;height:28px">
+          <button onClick="{{ toggleSidebar }}" title="Toggle sidebar" style="width:28px;height:28px;border-radius:8px;border:0;background:transparent;color:#0A0A0A;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0" style-hover="background:#F5F5F5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="9" y1="4" x2="9" y2="20"></line></svg>
+          </button>
+          <div style="width:1px;height:16px;background:#E5E5E5"></div>
+          <h1 style="margin:0;font:600 14px/1.2 Inter;color:#0A0A0A">Settings</h1>
+        </div>
+        <div style="display:flex;gap:4px;overflow-x:auto;margin:0 -16px;padding:0 12px">
+          <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="16">
+            <button class="tab-btn" onClick="{{ tab.select }}" data-on="{{ tab.selected }}" style="font-size: 14px">{{ tab.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:32px 32px 96px">
+        <sc-if value="{{ showEmail }}">
+        <div style="max-width:920px;margin:0 auto">
+          <section style="margin-bottom:32px">
+            <div style="margin-bottom:16px">
+              <h2 style="margin:0 0 4px;font:600 18px/1.3 Inter;color:#171717;letter-spacing:-0.005em">Email signature</h2>
+              <p style="margin:0;font:400 13px/1.5 Inter;color:#737373">Added to the bottom of emails you send from Radius.</p>
+            </div>
+            <div>
+              <div style="background: #fff; border: 1px solid #e5e5e5; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.04); overflow: hidden">
+                <div style="display:flex;align-items:center;gap:2px;padding:6px 8px;border-bottom:1px solid #f0f0f0;background:#fafafa;flex-wrap:wrap">
+                  <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.DropdownMenu" trigger="{{ fontTrigger }}" items="{{ fontItems }}" hint-size="auto,28px"></x-import>
+                  <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.DropdownMenu" trigger="{{ sizeTrigger }}" items="{{ sizeItems }}" hint-size="auto,28px"></x-import>
+                  <div class="tb-div"></div>
+                  <button class="tb" onClick="{{ toggleBold }}" data-on="{{ fmtBold }}" title="Bold"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg></button>
+                  <button class="tb" onClick="{{ toggleItalic }}" data-on="{{ fmtItalic }}" title="Italic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="4" x2="10" y2="4"></line><line x1="14" y1="20" x2="5" y2="20"></line><line x1="15" y1="4" x2="9" y2="20"></line></svg></button>
+                  <button class="tb" onClick="{{ toggleUnderline }}" data-on="{{ fmtUnderline }}" title="Underline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a6 6 0 0 0 12 0V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg></button>
+                  <div class="tb-div"></div>
+                  <button class="tb-sel" onClick="{{ openColor }}" title="Text color">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"></path><path d="M6 16l6-12 6 12"></path><path d="M8 12h8"></path></svg>
+                    <span ref="{{ colorSwatchRef }}" style="width:10px;height:10px;border-radius:2px;background:#171717;border:1px solid rgba(0,0,0,.1)"></span>
+                  </button>
+                  <button class="tb" onClick="{{ openLink }}" title="Insert link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button>
+                  <div class="tb-div"></div>
+                  <button class="tb" title="Align left"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="17" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="17" y1="18" x2="3" y2="18"></line></svg></button>
+                  <button class="tb" title="Align center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="10" x2="6" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg></button>
+                  <div class="tb-div"></div>
+                  <button class="tb" title="Bulleted list"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button>
+                  <button class="tb" title="Numbered list"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"></line><line x1="10" y1="12" x2="21" y2="12"></line><line x1="10" y1="18" x2="21" y2="18"></line><path d="M4 6h1v4"></path><path d="M4 10h2"></path><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"></path></svg></button>
+                  <div class="tb-div"></div>
+                  <button class="tb" title="Insert image (paste supported)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg></button>
+                </div>
+                <div contentEditable="{{ true }}" class="editor" ref="{{ editorRef }}" onInput="{{ onEdit }}" onKeyDown="{{ onKey }}" onPaste="{{ onPaste }}"></div>
+                <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid #f0f0f0;background:#fafafa">
+                  <button class="swx {{ swxDefaultClass }}" onClick="{{ toggleDefault }}"></button>
+                  <div style="font:500 12.5px/1.3 Inter;color:#171717">Use by default</div>
+                  <div style="font:400 12px/1.3 Inter;color:#737373">Include this signature on new emails.</div>
+                </div>
+              </div>
+              <sc-if value="{{ linkOpen }}">
+                <div style="margin-top:8px;padding:12px;background:#fff;border:1px solid #e5e5e5;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.08);max-width:360px">
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <label style="font:500 12px/1 Inter;color:#525252">URL</label>
+                    <input class="input" placeholder="https://" value="{{ linkUrl }}" onInput="{{ onLinkUrl }}">
+                    <label style="font:500 12px/1 Inter;color:#525252;margin-top:4px">Text</label>
+                    <input class="input" placeholder="Link text" value="{{ linkText }}" onInput="{{ onLinkText }}">
+                    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px">
+                      <button class="btn-g" onClick="{{ closeLink }}">Cancel</button>
+                      <button class="btn-p" onClick="{{ applyLink }}">Apply</button>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ colorOpen }}">
+                <div style="margin-top:8px;padding:12px;background:#fff;border:1px solid #e5e5e5;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.08);max-width:240px">
+                  <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px">
+                    <button onClick="{{ pickColor }}" data-hex="#171717" title="#171717" style="width:22px;height:22px;border-radius:4px;background:#171717;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#525252" title="#525252" style="width:22px;height:22px;border-radius:4px;background:#525252;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#737373" title="#737373" style="width:22px;height:22px;border-radius:4px;background:#737373;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#a3a3a3" title="#a3a3a3" style="width:22px;height:22px;border-radius:4px;background:#a3a3a3;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#DC2626" title="#DC2626" style="width:22px;height:22px;border-radius:4px;background:#DC2626;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#EA580C" title="#EA580C" style="width:22px;height:22px;border-radius:4px;background:#EA580C;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#6DA544" title="#6DA544" style="width:22px;height:22px;border-radius:4px;background:#6DA544;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#2563EB" title="#2563EB" style="width:22px;height:22px;border-radius:4px;background:#2563EB;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#5A5FF2" title="#5A5FF2" style="width:22px;height:22px;border-radius:4px;background:#5A5FF2;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#7c3aed" title="#7c3aed" style="width:22px;height:22px;border-radius:4px;background:#7c3aed;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#db2777" title="#db2777" style="width:22px;height:22px;border-radius:4px;background:#db2777;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#0891b2" title="#0891b2" style="width:22px;height:22px;border-radius:4px;background:#0891b2;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#ca8a04" title="#ca8a04" style="width:22px;height:22px;border-radius:4px;background:#ca8a04;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#166534" title="#166534" style="width:22px;height:22px;border-radius:4px;background:#166534;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#1e3a8a" title="#1e3a8a" style="width:22px;height:22px;border-radius:4px;background:#1e3a8a;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                      <button onClick="{{ pickColor }}" data-hex="#000000" title="#000000" style="width:22px;height:22px;border-radius:4px;background:#000000;border:1px solid rgba(0,0,0,.1);cursor:pointer;padding:0"></button>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </section>
+          <div style="height:1px;background:#e5e5e5;margin:32px 0"></div>
+          <section>
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px">
+              <div>
+                <h2 style="margin:0 0 4px;font:600 18px/1.3 Inter;color:#171717;letter-spacing:-0.005em">Email templates</h2>
+                <p style="margin:0;font:400 13px/1.5 Inter;color:#737373">Create and manage reusable email templates for your workflow.</p>
+              </div>
+              <button class="btn-o"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>New template</button>
+            </div>
+            <div style="background:#fff;border:1px solid #e5e5e5;border-radius:10px;box-shadow:0 1px 2px rgba(0,0,0,.04);overflow:hidden">
+              <sc-for list="{{ templates }}" as="t" hint-placeholder-count="4">
+                <div class="tpl-row">
+                  <div style="min-width:0;flex:1">
+                    <div style="font:500 14px/1.3 Inter;color:#171717">{{ t.name }}</div>
+                    <div style="font:400 12px/1.4 Inter;color:#737373;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.subject }}</div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:12px;flex:none">
+                    <span style="font:400 12px/1 Inter;color:#a3a3a3;font-family:'Geist Mono',ui-monospace,monospace">{{ t.used }}</span>
+                    <button class="ic-btn" title="Edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+                    <button class="ic-btn" title="More"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ showCampaigns }}">
+        <div style="max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:20px">
+
+          <!-- AI settings — compact single-row card -->
+          <div style="background:#fff;border:1px solid #E5E5E5;border-radius:14px;box-shadow:0 1px 2px -1px rgba(0,0,0,.1),0 1px 3px rgba(0,0,0,.1);padding:16px 24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+            <div style="font:600 14px/1 Inter;color:#0A0A0A">AI settings</div>
+            <div style="width:1px;height:20px;background:#E5E5E5"></div>
+            <label style="display:inline-flex;align-items:center;gap:10px;cursor:pointer;font:400 13px/1 Inter;color:#0A0A0A">
+              <button class="aic-swx {{ aiChatClass }}" onClick="{{ toggleAiChat }}" aria-label="AI chat replies"></button>
+              <span>AI chat replies</span>
+            </label>
+            <div style="width:1px;height:20px;background:#E5E5E5;margin:0 4px"></div>
+            <div style="display:inline-flex;align-items:center;gap:10px">
+              <label style="display:inline-flex;align-items:center;gap:10px;cursor:pointer;font:400 13px/1 Inter;color:#0A0A0A">
+                <button class="aic-swx {{ aiSummariesClass }}" onClick="{{ toggleAiSummaries }}" aria-label="Automatic summaries"></button>
+                <span>Automatic summaries</span>
+              </label>
+              <span style="font:400 13px/1 Inter;color:#A3A3A3">·</span>
+              <div style="display:inline-flex;align-items:center;gap:6px">
+                <span style="font:400 12px/1 Inter;color:#737373">every</span>
+                <div class="aic-cad-select">
+                  <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.DropdownMenu" trigger="{{ cadenceTrigger }}" items="{{ cadenceItems }}" hint-size="110px,28px"></x-import>
+                </div>
+              </div>
+            </div>
+            <div style="flex:1"></div>
+          </div>
+
+          <!-- Campaigns hero card -->
+          <div style="background:#fff;border:1px solid #E5E5E5;border-radius:14px;box-shadow:0 1px 2px -1px rgba(0,0,0,.1),0 1px 3px rgba(0,0,0,.1);overflow:hidden">
+            <div style="padding:8px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid #E5E5E5">
+              <div style="flex:1;min-width:0">
+                <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Tabs" tabs="{{ subTabs }}" value="{{ campaignSub }}" onChange="{{ selectCampaignSub }}" variant="segmented" hint-size="auto,36px"></x-import>
+              </div>
+              <div style="width:220px;flex:none">
+                <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.SearchInput" value="{{ campaignQuery }}" onChange="{{ setCampaignQuery }}" placeholder="Search campaigns…" hint-size="100%,32px"></x-import>
+              </div>
+              <div class="aic-indigo-cta" style="flex:none">
+                <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Button" onClick="{{ newCampaign }}" leftIcon="{{ plusIcon }}" hint-size="auto,32px">New campaign</x-import>
+              </div>
+            </div>
+
+            <sc-if value="{{ hasCampaigns }}">
+            <div class="aic-table-wrap">
+              <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Table" columns="{{ campaignColumns }}" data="{{ campaigns }}" hint-size="100%,auto"></x-import>
+            </div>
+            </sc-if>
+
+            <sc-if value="{{ isEmpty }}">
+            <div style="padding:64px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px">
+              <div style="width:44px;height:44px;border-radius:10px;background:#F5F5F5;color:#737373;display:inline-flex;align-items:center;justify-content:center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"></path></svg>
+              </div>
+              <h3 style="margin:0;font:600 16px/1.3 Inter;color:#0A0A0A;letter-spacing:-0.005em">Run outreach on autopilot</h3>
+              <p style="margin:0;max-width:420px;font:400 13px/1.55 Inter;color:#737373">An AI campaign sends personalized email, in-app and text follow-ups to a set of clients you choose.</p>
+              <div class="aic-indigo-cta" style="margin-top:4px">
+                <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Button" onClick="{{ newCampaign }}" hint-size="auto,32px">Create your first campaign</x-import>
+              </div>
+            </div>
+            </sc-if>
+          </div>
+
+          <div style="display: flex; justify-content: space-around; padding: 4px 4px 0; font: 400 12.5px/1.4 Inter; color: #737373; letter-spacing: -0.005em">
+            <span style="display: inline-flex; align-items: center; gap: 6px; justify-content: space-around; color: #7373734D">
+              Made with
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="#EF4B6C" aria-hidden="true" style="display:block">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z" style="opacity: 0.5"></path>
+              </svg>
+              in Radius. Exciting new features are coming up.
+            </span>
+          </div>
+        </div>
+        </sc-if>
+
+      </div>
+      <sc-if value="{{ showEmail }}">
+      <div style="border-top:1px solid #e5e5e5;background:#fff;padding:12px 32px;flex:none">
+        <div style="max-width:920px;margin:0 auto;display:flex;align-items:center;gap:12px">
+          <sc-if value="{{ dirty }}">
+            <span style="font:400 13px/1 Inter;color:#737373">Unsaved changes</span>
+          </sc-if>
+          <div style="flex:1"></div>
+          <button class="btn-g" onClick="{{ discardChanges }}">Cancel</button>
+          <button class="btn-p" disabled="{{ saveDisabled }}" onClick="{{ saveChanges }}">
+            <sc-if value="{{ saving }}"><span style="width:12px;height:12px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .6s linear infinite;display:inline-block"></span></sc-if>
+            {{ saveLabel }}
+          </button>
+        </div>
+      </div>
+      </sc-if>
+      <sc-if value="{{ toastShown }}">
+        <div style="position:fixed;bottom:24px;right:24px;background:#171717;color:#fafafa;padding:12px 16px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);font:500 13px/1.3 Inter;display:flex;align-items:center;gap:10px;z-index:100">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          {{ toastMessage }}
+        </div>
+      </sc-if>
+    </div>
+    <!-- Persistent Mel footer bar (Dark Pill) -->
+    <div style="flex:none;padding:12px 16px 16px;background:transparent">
+      <div style="position:relative;width:100%;height:64px;overflow:hidden;border-radius:20px;background:linear-gradient(-87.335deg,#10081F 0.02%,#2D1B69 60.5%,#10081F 120.98%);box-shadow:inset 0 0 0 1px rgba(255,255,255,0.08),0 25px 50px -12px rgba(0,0,0,0.25);display:flex;flex-direction:row;align-items:center;gap:12px;padding:12px 14px;box-sizing:border-box">
+        <img src="uploads/Icon.svg" alt="Mel" style="width:36px;height:36px;flex:none;display:block">
+        <span style="flex-grow:1;font:400 15px/1 Inter;color:#CBD5E1">What can I help with today?</span>
+        <div style="display:flex;flex-direction:row;gap:12px;align-items:center;flex:none">
+          <div style="width:1px;height:22px;background:rgba(255,255,255,0.14)"></div>
+          <div style="display:flex;flex-direction:row;gap:10px;align-items:center;color:rgba(255,255,255,0.75)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </div>
+          <button type="button" aria-label="Send" style="width:40px;height:40px;border:0;border-radius:10px;background:#5A5FF2;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none" style-hover="background:#4A4FE0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+  </div>
+</div>
+
+<x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Sheet" open="{{ campaignPanelOpen }}" onClose="{{ closeCampaignPanel }}" side="right" title="{{ sheetTitle }}" description="{{ sheetDesc }}" className="aic-camp-sheet" footer="{{ campaignPanelFooter }}" hint-size="520px,100%">
+  <div style="display:flex;flex-direction:column;gap:0">
+    <button type="button" class="aic-sheet-close" onClick="{{ closeCampaignPanel }}" aria-label="Close panel">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+
+    <!-- Coming-soon section strip: edge-to-edge under sheet header -->
+    <div class="aic-cs-strip">
+      <span class="ttl">Set reminder</span>
+      <span class="badge"><span class="dot"></span>Coming soon</span>
+    </div>
+
+    <!-- Mel goal banner with embedded search bar -->
+    <sc-if value="{{ melBannerVisible }}">
+    <div class="aic-mel-banner" style="align-items: center">
+      <button class="close" onClick="{{ dismissMelBanner }}" aria-label="Dismiss">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <img class="mel-glow" src="uploads/Container.png" alt="" aria-hidden="true">
+      <div class="body">
+      <form class="aic-goal" onSubmit="{{ submitGoal }}" style="flex-direction: row; align-items: stretch">
+        <input class="goal-input" placeholder="Let Mel build this campaign" value="{{ goalInput }}" onChange="{{ setGoalInput }}" disabled="{{ melDrafting }}">
+        <div class="toolbar">
+          <div class="opts" style="display: none">
+            <button type="button" class="opt" aria-label="Attach property">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V8l7-5 7 5v13"></path><path d="M9 21v-6h6v6"></path></svg>
+              <span>Property</span>
+            </button>
+            <button type="button" class="opt" aria-label="Attach document">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="14" y2="17"></line></svg>
+              <span>Document</span>
+            </button>
+            <button type="button" class="opt" aria-label="Attach image">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="9" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              <span>Image</span>
+            </button>
+          </div>
+          <div class="actions">
+            <button type="button" class="mic" aria-label="Voice input">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 10a7 7 0 0 0 14 0"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
+            </button>
+            <button type="submit" class="send" aria-label="Ask Mel" disabled="{{ goalSendDisabled }}">
+              <sc-if value="{{ melDrafting }}"><span class="spinner"></span></sc-if>
+              <sc-if value="{{ goalIdle }}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </sc-if>
+            </button>
+          </div>
+        </div>
+      </form>
+      <sc-if value="{{ melDrafted }}">
+        <div class="aic-mel-drafted">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Mel pre-filled a draft below. Review and adjust anything, then <b>Add campaign</b>.</span>
+        </div>
+      </sc-if>
+      </div>
+    </div>
+    </sc-if>
+
+    <div style="height:16px"></div>
+
+    <!-- Campaign name -->
+    <div class="aic-block">
+      <div class="aic-block-hd" data-collapsed="{{ blkNameCollapsed }}"><span class="ttl">Campaign name<span class="req"> *</span></span><span onClick="{{ toggleBlkName }}" style="display:inline-flex;align-items:center;justify-content:center;color:#737373;cursor:pointer;margin-left:auto;padding:2px" aria-label="Toggle section"><x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Icon" name="{{ blkNameChev }}" size="16" hint-size="16px,16px"></x-import></span></div>
+      <sc-if value="{{ blkNameOpen }}">
+      <input class="rds-input" placeholder="e.g. Spring buyers nurture" value="{{ campName }}" onChange="{{ setCampName }}">
+      </sc-if>
+    </div>
+
+    <!-- Assign to -->
+    <div class="aic-block">
+      <div class="aic-block-hd" data-collapsed="{{ blkAssignCollapsed }}"><span class="ttl">Assign to<span class="req"> *</span></span><span onClick="{{ toggleBlkAssign }}" style="display:inline-flex;align-items:center;justify-content:center;color:#737373;cursor:pointer;margin-left:auto;padding:2px" aria-label="Toggle section"><x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Icon" name="{{ blkAssignChev }}" size="16" hint-size="16px,16px"></x-import></span></div>
+      <sc-if value="{{ blkAssignOpen }}">
+      <div class="aic-drop" id="aic-assign-drop">
+        <button class="trg" data-open="{{ assignOpen }}" onClick="{{ toggleAssign }}" aria-expanded="{{ assignOpen }}">
+          <span style="min-width:0;display:flex;align-items:center;gap:10px">
+            <span style="width:28px;height:28px;border-radius:50%;background:#5A5FF2;color:#fff;display:inline-flex;align-items:center;justify-content:center;font:600 10.5px/1 Inter;flex:none">{{ agentInitials }}</span>
+            <span style="min-width:0">
+              <span class="lbl">{{ agentName }}</span>
+              <span class="sub" style="display:block">{{ agentSubtitle }}</span>
+            </span>
+          </span>
+          <span class="chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+        </button>
+        <sc-if value="{{ assignOpen }}">
+          <div class="menu">
+            <sc-for list="{{ assignOptions }}" as="a" hint-placeholder-count="3">
+              <div class="item" data-on="{{ a.on }}" onClick="{{ a.select }}">
+                <span style="min-width:0">
+                  <span class="lbl">{{ a.label }}</span>
+                  <span class="sub" style="display:block">{{ a.sub }}</span>
+                </span>
+                <span class="ck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+      <sc-if value="{{ showAgentPicker }}">
+        <div class="aic-ac" style="margin-top:10px" id="aic-agent-picker">
+          <div class="aic-clientsearch">
+            <span class="lic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+            <input placeholder="Search agents by name or email" value="{{ agentQuery }}" onChange="{{ setAgentQuery }}" onFocus="{{ openAgentResults }}">
+            <span class="ric" onClick="{{ toggleAgentResults }}" style="cursor:pointer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:{{ agentChevronRotate }};transition:transform 140ms ease"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+          </div>
+          <sc-if value="{{ hasSelectedAgents }}">
+            <div class="aic-selchips" style="margin-top:8px">
+              <sc-for list="{{ selectedAgentsView }}" as="a" hint-placeholder-count="2">
+                <span class="aic-selchip">
+                  <span class="nm">{{ a.name }}</span>
+                  <button class="x" onClick="{{ a.remove }}" aria-label="Remove">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  </button>
+                </span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ agentResultsOpen }}">
+            <div class="aic-ac-menu">
+              <sc-if value="{{ agentResultsHave }}">
+                <sc-for list="{{ agentResults }}" as="r" hint-placeholder-count="6">
+                  <label class="aic-ac-item" style="cursor:pointer">
+                    <span class="av" style="background:#5A5FF2;color:#fff">{{ r.initials }}</span>
+                    <span class="txt">
+                      <span class="nm">{{ r.name }}</span>
+                      <span class="meta">{{ r.email }}</span>
+                    </span>
+                    <input type="checkbox" class="rds-checkbox" checked="{{ r.on }}" onChange="{{ r.toggle }}" style="flex:none;width:16px;height:16px;accent-color:#5A5FF2;cursor:pointer">
+                  </label>
+                </sc-for>
+              </sc-if>
+              <sc-if value="{{ agentResultsEmpty }}">
+                <div class="aic-ac-empty">
+                  No matches for <b>{{ agentQuery }}</b>. Try a different name or email.
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+      </sc-if>
+    </div>
+    <div class="aic-block">
+      <div class="aic-block-hd" data-collapsed="{{ blkAudCollapsed }}"><span class="ttl">Audience<span class="req"> *</span></span><span onClick="{{ toggleBlkAud }}" style="display:inline-flex;align-items:center;justify-content:center;color:#737373;cursor:pointer;margin-left:auto;padding:2px" aria-label="Toggle section"><x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Icon" name="{{ blkAudChev }}" size="16" hint-size="16px,16px"></x-import></span></div>
+      <sc-if value="{{ blkAudOpen }}">
+
+      <label class="aic-field-label" style="font-weight:400;color:#525252;margin-bottom:6px">Select clients <span style="color:#A3A3A3;font-weight:400">({{ selectedClientsCount }} selected)</span></label>
+
+      <sc-if value="{{ hasSelectedClients }}">
+        <div class="aic-selchips">
+          <sc-for list="{{ selectedClientsView }}" as="c" hint-placeholder-count="2">
+            <span class="aic-selchip">
+              <span class="nm">{{ c.name }}</span>
+              <button class="x" onClick="{{ c.remove }}" aria-label="Remove">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </span>
+          </sc-for>
+          <sc-if value="{{ selectedOverflow }}">
+            <span class="aic-selchip" style="background:#F5F5F5;border-color:#E5E5E5;color:#525252">
+              <span class="nm">+{{ selectedOverflowCount }} more</span>
+            </span>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <div class="aic-ac" id="aic-client-picker">
+        <div class="aic-clientsearch aic-clientsearch--centered">
+          <span class="lic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+          <input placeholder="Search client by name, email, or phone number" value="{{ clientQuery }}" onChange="{{ setClientQuery }}" onFocus="{{ openClientResults }}" style="width: 100%">
+          <span class="ric" onClick="{{ toggleClientResults }}" style="cursor:pointer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform:{{ clientResultsChevronRotate }};transition:transform 140ms ease"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+        </div>
+        <sc-if value="{{ clientResultsOpen }}">
+          <div class="aic-ac-menu">
+            <sc-if value="{{ clientResultsHave }}">
+              <sc-for list="{{ clientResults }}" as="r" hint-placeholder-count="5">
+                <label class="aic-ac-item" style="cursor:pointer">
+                  <span class="av">{{ r.initials }}</span>
+                  <span class="txt">
+                    <span class="nm">{{ r.name }}</span>
+                    <span class="meta">{{ r.meta }}</span>
+                  </span>
+                  <span class="tag">{{ r.tag }}</span>
+                  <input type="checkbox" class="rds-checkbox" checked="{{ r.on }}" onChange="{{ r.toggle }}" style="flex:none;width:16px;height:16px;accent-color:#5A5FF2;cursor:pointer">
+                </label>
+              </sc-for>
+            </sc-if>
+            <sc-if value="{{ clientResultsEmpty }}">
+              <div class="aic-ac-empty">
+                No matches for <b>{{ clientQuery }}</b>. Try a different name, email or phone.
+              </div>
+            </sc-if>
+            <div class="aic-ac-footer">
+              <span>{{ clientResultsSummary }}</span>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div class="aic-or">or</div>
+
+      <label class="aic-field-label" style="font-weight:400;color:#525252;margin-bottom:6px">Select group or smart list</label>
+      <div class="aic-drop" id="aic-audience-drop">
+        <button class="trg" data-open="{{ audienceOpen }}" onClick="{{ toggleAudience }}" aria-expanded="{{ audienceOpen }}">
+          <span style="min-width:0">
+            <span class="lbl">{{ audienceLabel }}</span>
+            <span class="sub" style="display:block">{{ audienceSubtitle }}</span>
+          </span>
+          <span class="chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
+        </button>
+        <sc-if value="{{ audienceOpen }}">
+          <div class="menu">
+            <div class="grp">Groups</div>
+            <sc-for list="{{ audienceGroups }}" as="g" hint-placeholder-count="3">
+              <div class="item" data-on="{{ g.on }}" onClick="{{ g.select }}">
+                <span style="min-width:0">
+                  <span class="lbl">{{ g.label }}</span>
+                  <span class="sub" style="display:block">{{ g.sub }}</span>
+                </span>
+                <span class="ck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              </div>
+            </sc-for>
+            <div class="divider"></div>
+            <div class="grp">Smart lists</div>
+            <sc-for list="{{ audienceSmart }}" as="g" hint-placeholder-count="3">
+              <div class="item" data-on="{{ g.on }}" onClick="{{ g.select }}">
+                <span style="min-width:0">
+                  <span class="lbl">{{ g.label }}</span>
+                  <span class="sub" style="display:block">{{ g.sub }}</span>
+                </span>
+                <span class="ck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+      </sc-if>
+    </div>
+
+    <!-- Milestones -->
+    <div class="aic-block">
+      <div class="aic-block-hd" data-collapsed="{{ blkMilCollapsed }}">
+        <span class="ttl">Set milestones<span class="req"> *</span></span>
+        <span class="aic-info" tabindex="0"><span class="aic-info__i" aria-label="More info">i</span><span class="rds-hovercard aic-info__card" role="tooltip">Choose the moments Mel should follow up on — tap to add or remove.</span></span>
+        <sc-if value="{{ milestonesHaveOptions }}"><span style="font:400 11.5px/1 Inter;color:#737373">{{ milestonesSelectedCount }} selected</span></sc-if>
+        <span onClick="{{ toggleBlkMil }}" style="display:inline-flex;align-items:center;justify-content:center;color:#737373;cursor:pointer;margin-left:auto;padding:2px" aria-label="Toggle section"><x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Icon" name="{{ blkMilChev }}" size="16" hint-size="16px,16px"></x-import></span>
+      </div>
+      <sc-if value="{{ blkMilOpen }}">
+      <sc-if value="{{ milestonesHaveOptions }}">
+        <div class="aic-mstones" style="margin-top:4px">
+          <sc-for list="{{ milestoneChips }}" as="m" hint-placeholder-count="5">
+            <button class="aic-mstone" data-on="{{ m.on }}" onClick="{{ m.toggle }}">
+              <span class="n">{{ m.n }}</span>
+              <span>{{ m.label }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ milestonesNoOptions }}">
+        <div style="font:400 12.5px/1.5 Inter;color:#737373">{{ milestonesHint }}</div>
+      </sc-if>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid #F0F0F0">
+        <span style="font:500 13px/1 Inter;color:#171717">Post close nurture</span>
+        <span class="aic-info" tabindex="0"><span class="aic-info__i" aria-label="More info">i</span><span class="rds-hovercard aic-info__card" role="tooltip">Keep Mel checking in with the client after closing — anniversaries, valuations, referrals.</span></span>
+        <input type="checkbox" class="rds-switch aic-switch-indigo" style="margin-left:auto" checked="{{ postCloseNurture }}" onChange="{{ togglePostCloseNurture }}" aria-label="Post close nurture">
+      </div>
+      </sc-if>
+    </div>
+
+    <!-- How to send -->
+    <div class="aic-block">
+      <div class="aic-block-hd" data-collapsed="{{ blkChCollapsed }}"><span class="ttl">How do you want to send the reminder<span class="req"> *</span></span><span class="aic-info" tabindex="0"><span class="aic-info__i" aria-label="More info">i</span><span class="rds-hovercard aic-info__card" role="tooltip">Follow-ups fall back through the channels you enable, in order.</span></span><span onClick="{{ toggleBlkCh }}" style="display:inline-flex;align-items:center;justify-content:center;color:#737373;cursor:pointer;margin-left:auto;padding:2px" aria-label="Toggle section"><x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Icon" name="{{ blkChChev }}" size="16" hint-size="16px,16px"></x-import></span></div>
+      <sc-if value="{{ blkChOpen }}">
+      <div class="aic-mstones" style="margin-top:4px">
+        <sc-for list="{{ channelChips }}" as="c" hint-placeholder-count="3">
+          <span class="aic-info" tabindex="0" style="display:inline-flex">
+            <button class="aic-mstone" data-on="{{ c.on }}" data-channel="{{ c.key }}" onClick="{{ c.toggle }}" aria-pressed="{{ c.on }}" aria-label="{{ c.label }}" style="padding:8px 12px">
+              <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Icon" name="{{ c.icon }}" size="16" hint-size="16px,16px"></x-import>
+              <span>{{ c.label }}</span>
+            </button>
+            <span class="rds-hovercard aic-info__card" role="tooltip">{{ c.hint }}</span>
+          </span>
+        </sc-for>
+      </div>
+      </sc-if>
+    </div>
+
+    <!-- AI Prospecting Instructions -->
+    <div class="aic-block">
+      <div class="aic-block-hd" data-collapsed="{{ blkInsCollapsed }}"><span class="ttl">AI Prospecting Instructions</span><span class="aic-info" tabindex="0"><span class="aic-info__i" aria-label="More info">i</span><span class="rds-hovercard aic-info__card" role="tooltip">Custom instructions help Mel understand your communication style, scripts, and workflows.</span></span><span onClick="{{ toggleBlkIns }}" style="display:inline-flex;align-items:center;justify-content:center;color:#737373;cursor:pointer;margin-left:auto;padding:2px" aria-label="Toggle section"><x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Icon" name="{{ blkInsChev }}" size="16" hint-size="16px,16px"></x-import></span></div>
+      <sc-if value="{{ blkInsOpen }}">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px">
+        <sc-for list="{{ tplChips }}" as="t" hint-placeholder-count="5">
+          <button class="aic-tpl-chip" data-on="{{ t.on }}" onClick="{{ t.select }}">
+            <img class="glyph" src="assets/mel-sparkle.svg" alt="" aria-hidden="true"><span>{{ t.label }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ subOpen }}">
+      <div style="font:400 11.5px/1.4 Inter;color:#737373;margin-bottom:8px">Select a template to append it to the instructions field and edit it before saving.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+        <sc-for list="{{ tplSubChips }}" as="t" hint-placeholder-count="3">
+          <button class="aic-tpl-chip" data-on="{{ t.on }}" onClick="{{ t.select }}">
+            <img class="glyph" src="assets/mel-sparkle.svg" alt="" aria-hidden="true"><span>{{ t.label }}</span>
+          </button>
+        </sc-for>
+      </div>
+      </sc-if>
+      <textarea class="rds-input rds-textarea aic-textarea" rows="6" placeholder="Type your instruction here" value="{{ instructionsText }}" onChange="{{ setInstructionsText }}" maxLength="{{ instructionsMax }}"></textarea>
+      <span class="aic-count">{{ instructionsCount }}/2000</span>
+      </sc-if>
+    </div>
+
+    <!-- Reference Documents -->
+    <div class="aic-block">
+      <div class="aic-block-hd" data-collapsed="{{ blkRefCollapsed }}"><span class="ttl">Reference Documents<sc-if value="{{ hasRefFiles }}"><span class="aic-count-chip">{{ refCountLabel }}</span></sc-if><span class="aic-info aic-info--inline" tabindex="0"><span class="aic-info__i" aria-label="More info">i</span>
+<span class="rds-hovercard aic-info__card" role="tooltip">Attach reference material to guide Mel's campaign behavior.</span></span></span><span class="aic-ttl-spacer"></span><sc-if value="{{ showHeaderAdd }}"><span class="aic-info aic-hd-add {{ refHintClass }}" tabindex="0" onClick="{{ addMockFile }}" aria-label="Add reference document">
+          <span class="aic-hd-add__btn" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>
+          <span class="rds-hovercard aic-info__card" role="tooltip"><span class="aic-hd-add__text">Drag &amp; drop files here, or click to upload. PDF, DOC, DOCX up to 10MB.</span><button type="button" class="aic-hd-add__close" onClick="{{ dismissRefHint }}" aria-label="Dismiss"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></span></span></sc-if><span onClick="{{ toggleBlkRef }}" style="display:inline-flex;align-items:center;justify-content:center;color:#737373;cursor:pointer;padding:2px" aria-label="Toggle section"><x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Icon" name="{{ blkRefChev }}" size="16" hint-size="16px,16px"></x-import></span></div>
+      <sc-if value="{{ blkRefOpen }}">
+      <sc-if value="{{ refEmpty }}">
+      <div>
+        <div class="rds-empty">
+          <div class="rds-empty__media">
+            <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Icon" name="upload" size="24" hint-size="24px,24px"></x-import>
+          </div>
+          <p class="rds-empty__title">No reference documents</p>
+          <p class="rds-empty__desc">Upload files to guide Mel's campaign behavior. PDF, DOC, DOCX up to 10MB.</p>
+          <div style="margin-top:var(--space-2)">
+            <x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.Button" variant="outline" size="sm" onClick="{{ addMockFile }}" hint-size="auto,32px">Upload files</x-import>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+      <sc-if value="{{ hasRefFiles }}">
+      <div class="aic-file-carousel">
+        <button type="button" class="aic-file-nav" data-dir="prev" onClick="{{ scrollFilesPrev }}" aria-label="Scroll left">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <div class="aic-file-row" ref="{{ refRowRef }}">
+      <sc-for list="{{ refFiles }}" as="f" hint-placeholder-count="0">
+        <div class="aic-file-item">
+          <span class="thumb" aria-hidden="true"></span>
+          <div class="row">
+            <span class="ico">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            </span>
+            <span class="nm">{{ f.name }}</span>
+          </div>
+          <button class="rm" onClick="{{ f.remove }}" aria-label="Remove">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </sc-for>
+        <sc-if value="{{ showInlineAdd }}">
+        <span class="aic-info aic-file-add" tabindex="0" onClick="{{ addMockFile }}" aria-label="Add reference document">
+          <button type="button" class="aic-file-add__btn" aria-label="Add">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </button>
+          <span class="rds-hovercard aic-info__card" role="tooltip">Drag &amp; drop files here, or click to upload. PDF, DOC, DOCX up to 10MB.</span>
+        </span>
+        </sc-if>
+        </div>
+        <button type="button" class="aic-file-nav" data-dir="next" onClick="{{ scrollFilesNext }}" aria-label="Scroll right">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+      </sc-if>
+      </sc-if>
+    </div>
+
+  </div>
+</x-import>
+
+<x-import component-from-global-scope="RadiusUIDesignSystem_c7220b.AlertDialog" open="{{ pendingDeleteOpen }}" onCancel="{{ cancelDelete }}" onConfirm="{{ confirmDelete }}" title="Delete campaign?" description="{{ deleteDesc }}" confirmLabel="Delete campaign" cancelLabel="Cancel" destructive="{{ true }}" hint-size="0,0"></x-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    view: 'settings',
+    selectedTab: 'AI Campaigns',
+    sidebarOpen: true,
+    campaignSub: 'my',
+    campaignQuery: '',
+    aiChat: true,
+    aiSummaries: true,
+    refreshCadence: 'Weekly',
+    sigHtml: '<b>Kira Alvarez</b><br>Senior Agent · Radius<br>(415) 555-0198 · kira@radius.example',
+    dirty: false,
+    saving: false,
+    toast: false,
+    useDefault: true,
+    linkOpen: false,
+    linkUrl: '',
+    linkText: '',
+    colorOpen: false,
+    color: '#171717',
+    fmtBold: false, fmtItalic: false, fmtUnderline: false,
+    fontFamily: 'Inter',
+    fontSize: 'Normal',
+    msgBody: '',
+    toastMessage: 'Signature saved',
+    campaignPanelOpen: false,
+    campName: '',
+    goalInput: '',
+    melDrafting: false,
+    melDrafted: false,
+    melBannerDismissed: false,
+    assignTo: 'onlyMe',
+    assignOpen: false,
+    selectedAgentIds: [],
+    agentQuery: '',
+    agentResultsOpen: false,
+    clientQuery: '',
+    clientResultsOpen: false,
+    selectedClientIds: [],
+    audienceOpen: false,
+    audienceKey: 'all_buyers',
+    milestonesSelected: {},
+    postCloseNurture: false,
+    campChannels: { InApp: true, Email: false, Text: false },
+    instructionsText: '',
+    tplSelected: {},
+    subOpen: false,
+    refFiles: [],
+    blkOpen: { name:true, assign:true, aud:true, mil:true, ch:true, ins:true, ref:true },
+    editingCampaignId: null,
+    pendingDeleteRow: null
+  };
+
+  componentDidMount() {
+    if (this.editor && !this.editor.innerHTML) {
+      this.editor.innerHTML = this.state.sigHtml || '';
+    }
+    this._outsideClickHandler = (e) => {
+      const t = e.target;
+      const inAgent = t.closest && t.closest('#aic-agent-picker');
+      const inClient = t.closest && t.closest('#aic-client-picker');
+      const inAssignDrop = t.closest && t.closest('#aic-assign-drop');
+      const inAudienceDrop = t.closest && t.closest('#aic-audience-drop');
+      const patch = {};
+      if (!inAgent && this.state.agentResultsOpen) patch.agentResultsOpen = false;
+      if (!inClient && this.state.clientResultsOpen) patch.clientResultsOpen = false;
+      if (!inAssignDrop && this.state.assignOpen) patch.assignOpen = false;
+      if (!inAudienceDrop && this.state.audienceOpen) patch.audienceOpen = false;
+      if (Object.keys(patch).length) this.setState(patch);
+    };
+    document.addEventListener('mousedown', this._outsideClickHandler);
+  }
+
+  componentWillUnmount() {
+    if (this._outsideClickHandler) document.removeEventListener('mousedown', this._outsideClickHandler);
+  }
+
+  markDirty = () => { if (!this.state.dirty) this.setState({ dirty: true }); };
+
+  allClients = [
+    { id:1,  name:'Aarav Patel',        email:'aarav.patel@gmail.com',    phone:'(415) 555-0104', tag:'Buyer'  },
+    { id:2,  name:'Priya Shah',         email:'priya@shah.co',            phone:'(415) 555-0173', tag:'Buyer'  },
+    { id:3,  name:'Marcus Lee',         email:'m.lee@northbay.com',       phone:'(510) 555-0188', tag:'Seller' },
+    { id:4,  name:'Dana Ortiz',         email:'dana.ortiz@outlook.com',   phone:'(415) 555-0119', tag:'Seller' },
+    { id:5,  name:'Kenji Watanabe',     email:'kenji.w@archmail.com',     phone:'(650) 555-0142', tag:'Buyer'  },
+    { id:6,  name:'Sofia Martinez',     email:'sofia.m@martinez.io',      phone:'(415) 555-0126', tag:'Buyer'  },
+    { id:7,  name:'Ethan Bloom',        email:'ethan@bloomgrp.com',       phone:'(415) 555-0155', tag:'Past'   },
+    { id:8,  name:'Chloe Nguyen',       email:'chloe.n@fastmail.com',     phone:'(510) 555-0130', tag:'Buyer'  },
+    { id:9,  name:'Rahul Iyer',         email:'rahul.iyer@work.com',      phone:'(408) 555-0117', tag:'Seller' },
+    { id:10, name:'Isla Fitzgerald',    email:'isla.fitz@mail.com',       phone:'(415) 555-0166', tag:'Buyer'  },
+    { id:11, name:'Diego Alvarez',      email:'diego@alvarez.mx',         phone:'(415) 555-0181', tag:'Sphere' },
+    { id:12, name:'Naomi Brooks',       email:'naomi.brooks@studio.com',  phone:'(415) 555-0194', tag:'Buyer'  },
+    { id:13, name:'Yusuf Ahmed',        email:'yusuf.ahmed@mail.com',     phone:'(510) 555-0113', tag:'Seller' },
+    { id:14, name:'Grace Kim',          email:'grace.kim@atlas.co',       phone:'(415) 555-0148', tag:'Past'   },
+    { id:15, name:'Owen Sullivan',      email:'owen.s@sullivan.io',       phone:'(650) 555-0159', tag:'Buyer'  },
+    { id:16, name:'Lila Chen',          email:'lila.chen@mail.com',       phone:'(415) 555-0172', tag:'Buyer'  },
+    { id:17, name:'André Costa',        email:'andre.costa@luso.com',     phone:'(415) 555-0165', tag:'Seller' },
+    { id:18, name:'Beatrice Owens',     email:'bea.owens@northlink.com',  phone:'(415) 555-0139', tag:'Sphere' },
+    { id:19, name:'Tomasz Kowalski',    email:'tomasz.k@warsaw.pl',       phone:'(415) 555-0198', tag:'Buyer'  },
+    { id:20, name:'Mireya Rodriguez',   email:'mireya.r@vista.com',       phone:'(415) 555-0107', tag:'Past'   },
+    { id:21, name:'Harper Doyle',       email:'harper@doyle.co',          phone:'(415) 555-0143', tag:'Buyer'  },
+    { id:22, name:'Sean Kelly',         email:'sean.kelly@mail.com',      phone:'(415) 555-0121', tag:'Seller' },
+    { id:23, name:'Nadia Al-Farsi',     email:'nadia.af@mail.com',        phone:'(650) 555-0184', tag:'Buyer'  },
+    { id:24, name:'Mateo Rossi',        email:'mateo.rossi@italia.it',    phone:'(415) 555-0156', tag:'Buyer'  },
+    { id:25, name:'Emily Zhang',        email:'emily.zhang@zmail.com',    phone:'(415) 555-0129', tag:'Sphere' }
+  ];
+
+  appendTpl(t) {
+    const map = {
+      comm:    'Communication style: friendly, professional, and concise. Match the client\u2019s tone.',
+      script:  'Follow my script: open with the last touchpoint, confirm interest, offer one clear next step.',
+      follow:  'Follow-up workflow: 3-touch sequence over 10 days \u2014 email, in-app, then text if no reply.',
+      bounds:  'Boundaries & handoff: never quote price; escalate legal questions to me; loop me in on hot replies.',
+      all:     'All templates: apply the full standard playbook (communication style, script, follow-ups, boundaries).',
+      concise: 'Keep messages short (< 90 words) and channel-aware \u2014 subject lines for email, first-line hook for text.',
+      warm:    'Warm local expert: reference neighborhood specifics, recent sales, and community events.',
+      biling:  'Bilingual / formal: default to formal English; offer Spanish version when the client prefers it.'
+    };
+    const snippet = map[t.key] || t.label;
+    const current = this.state.instructionsText || '';
+    const next = (current ? current.replace(/\s+$/, '') + '\n\n' : '') + snippet;
+    this.setState({
+      instructionsText: next.slice(0, 2000),
+      tplSelected: { ...this.state.tplSelected, [t.key]: true }
+    });
+  }
+
+  openEditCampaign(row) {
+    const sub = (row.subtitle || '').toLowerCase();
+    let audienceKey = 'all_buyers';
+    if (sub.includes('maple')) audienceKey = 'maple_watch';
+    else if (sub.includes('condo')) audienceKey = 'condo_val';
+    else if (sub.includes('stale')) audienceKey = 'stale_leads';
+    else if (sub.includes('sphere')) audienceKey = 'sphere';
+    else if (sub.includes('past')) audienceKey = 'past_clients';
+    else if (sub.includes('all sellers')) audienceKey = 'all_sellers';
+    else if (sub.includes('all buyers')) audienceKey = 'all_buyers';
+    const campChannels = { InApp:false, Email:false, Text:false };
+    (row.channels || []).forEach(k => { if (k in campChannels) campChannels[k] = true; });
+    this.setState({
+      campaignPanelOpen: true,
+      editingCampaignId: row.name,
+      campName: row.name,
+      audienceKey,
+      campChannels,
+      melDrafted: true, melDrafting: false, melBannerDismissed: true,
+      instructionsText: this.state.instructionsText || ('Continue outreach for \u201C' + row.name + '\u201D. Reference the client\u2019s last activity, keep messages under 120 words, and end with one clear next step.'),
+      audienceOpen:false, assignOpen:false, clientResultsOpen:false
+    });
+  }
+
+  exec(cmd, val) {
+    if (this.editor) this.editor.focus();
+    try { document.execCommand(cmd, false, val); } catch(e) {}
+    this.setState({
+      fmtBold: document.queryCommandState('bold'),
+      fmtItalic: document.queryCommandState('italic'),
+      fmtUnderline: document.queryCommandState('underline')
+    });
+    this.markDirty();
+  }
+
+  renderVals() {
+    const s = this.state;
+    const TABS = ['Accounts','Email Settings','AI Campaigns','Automations','Billing','CDA Settings','Client App / Portal','Collaborators','Custom Fields','Finances','Integrations','Notifications','Phone Numbers','Pods','Team Settings','Transaction Settings'];
+    const tabs = TABS.map(label => ({
+      label,
+      selected: label === s.selectedTab,
+      select: () => this.setState({ selectedTab: label })
+    }));
+
+    const templates = [
+      { name:'New listing announcement', subject:'Just listed — {{address}}', used:'used 12×' },
+      { name:'Showing confirmation',     subject:'Your showing is confirmed for {{date}}', used:'used 34×' },
+      { name:'Offer follow-up',          subject:'Following up on your offer', used:'used 8×' },
+      { name:'Post-close thank you',     subject:'Congrats on your new home 🎉', used:'used 21×' }
+    ];
+
+    const saveDisabled = !s.dirty || s.saving;
+    const sigHtmlObj = { __html: s.sigHtml || '<span style="color:#a3a3a3">No signature yet.</span>' };
+
+    const showEmail = s.selectedTab === 'Email Settings';
+    const showCampaigns = s.selectedTab === 'AI Campaigns';
+    const sidebarOpen = s.sidebarOpen !== false;
+    const toggleSidebar = () => this.setState({ sidebarOpen: !sidebarOpen });
+
+    const NS = (window && window.RadiusUIDesignSystem_c7220b) || {};
+    const DSBadge = NS.Badge || (({children}) => React.createElement('span', null, children));
+    const DSButton = NS.Button || (({children, onClick}) => React.createElement('button', {onClick}, children));
+
+    // Clean single-path lucide-style glyphs so the stroke closes cleanly (no "stitched" seam)
+    const chMap = {
+      Email:  { label:'Email',  color:'#8B5CF6', paths:['M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z','M3 7l9 6 9-6'] },
+      InApp:  { label:'In-app', color:'#0EA5E9', paths:['M7.9 20A9 9 0 1 0 4 16.1L2 22Z'] },
+      Text:   { label:'Text',   color:'#EC4899', paths:['M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'] },
+    };
+    const statusMap = {
+      'New Client':                   { label:'New Client',                   bg:'#E7F5C8', fg:'#3F5A0E' },
+      'Met with Client':              { label:'Met with Client',              bg:'#FFF3B0', fg:'#6B5300' },
+      'Pre-approved/Listing Prepped': { label:'Pre-approved/Listing Prepped', bg:'#F7DDF0', fg:'#7A2E67' },
+      'Showings/Tours':               { label:'Showings/Tours',               bg:'#FBCFE8', fg:'#8A1F5C' },
+      'Sending/Receiving Offers':     { label:'Sending/Receiving Offers',     bg:'#CDE9F6', fg:'#0F5A7A' },
+      'In Contract':                  { label:'In Contract',                  bg:'#FBD0D5', fg:'#8B1F2E' },
+      'Closed':                       { label:'Closed',                       bg:'#DAD3F6', fg:'#3E2C8A' },
+      'Archived':                     { label:'Archived',                     bg:'#DCE9C9', fg:'#3A5010' },
+    };
+
+    const myCampaigns = [
+      { name:'Spring buyers nurture',            subtitle:'All buyers · 42 clients',                          source:'Agency',  channels:['Email','InApp'],       created:'07/15/2026', status:'Met with Client' },
+      { name:'Downtown condo valuation',         subtitle:'12 selected clients · Buyer',                      source:'–',       channels:['Email','Text'],        created:'07/02/2026', status:'Sending/Receiving Offers' },
+      { name:'Seller re-engage Q3',              subtitle:'All sellers · 18 clients',                         source:'Builder', channels:['InApp'],               created:'06/28/2026', status:'In Contract' },
+      { name:'New listing alerts — Maple St',    subtitle:'Smart list: Maple St watchers · 9 clients',        source:'Agency',  channels:['Email','InApp','Text'], created:'06/12/2026', status:'Showings/Tours'  },
+    ];
+    const teamCampaigns = [
+      { name:'Spring buyers nurture',            subtitle:'Owned by Priya Shah · All buyers · 42 clients',    source:'Agency',  channels:['Email','InApp'],       created:'07/15/2026', status:'Met with Client', owner:'Priya Shah' },
+      { name:'Downtown condo valuation',         subtitle:'Owned by Marcus Lee · 12 selected clients',        source:'–',       channels:['Email','Text'],        created:'07/02/2026', status:'Pre-approved/Listing Prepped', owner:'Marcus Lee' },
+      { name:'Seller re-engage Q3',              subtitle:'Owned by Dana Ortiz · All sellers · 18 clients',   source:'Builder', channels:['InApp'],               created:'06/28/2026', status:'Under Contract', owner:'Dana Ortiz' },
+      { name:'New listing alerts — Maple St',    subtitle:'Owned by Priya Shah · Smart list · 9 clients',     source:'Agency',  channels:['Email','InApp','Text'], created:'06/12/2026', status:'Archived',  owner:'Priya Shah' },
+    ];
+    const initials = (name) => name.split(/\s+/).map(p => p[0]).slice(0,2).join('').toUpperCase();
+    const sourceList = s.campaignSub === 'team' ? teamCampaigns : myCampaigns;
+    const q = (s.campaignQuery || '').trim().toLowerCase();
+    const filtered = q
+      ? sourceList.filter(c => c.name.toLowerCase().includes(q) || c.subtitle.toLowerCase().includes(q))
+      : sourceList;
+    const campaigns = filtered.map((c, i) => ({ ...c, id: i, hasOwner: !!c.owner }));
+
+    const ce = React.createElement;
+    const plusIcon = ce('svg', { width:14, height:14, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:2.5, strokeLinecap:'round', strokeLinejoin:'round' },
+      ce('line', { x1:12, y1:5, x2:12, y2:19 }),
+      ce('line', { x1:5, y1:12, x2:19, y2:12 })
+    );
+    const metricsIcon = ce('img', { src:'./assets/icons/metrics.svg', alt:'', width:14, height:14, style:{ display:'block' } });
+    const moreIcon = ce('svg', { width:16, height:16, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round' },
+      ce('circle', { cx:12, cy:12, r:1 }),
+      ce('circle', { cx:19, cy:12, r:1 }),
+      ce('circle', { cx:5, cy:12, r:1 })
+    );
+
+    const renderCampaignCell = (row) => {
+      const nameCol = ce('div', { style:{ minWidth:0 } },
+        ce('div', { style:{ font:'600 14px/1.3 Inter', color:'#0A0A0A', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' } }, row.name),
+        ce('div', { style:{ font:'400 12px/1.35 Inter', color:'#737373', marginTop:2, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' } }, row.subtitle),
+      );
+      if (row.hasOwner) {
+        return ce('div', { style:{ display:'flex', alignItems:'center', gap:10, minWidth:0 } },
+          ce('span', { style:{ width:24, height:24, borderRadius:'50%', background:'#F5F5F5', color:'#525252', display:'inline-flex', alignItems:'center', justifyContent:'center', font:'600 10px/1 Inter', flex:'none' } }, initials(row.owner)),
+          nameCol
+        );
+      }
+      return nameCol;
+    };
+
+    const campaignColumns = [
+      { key:'name', header:'Campaign', render: renderCampaignCell },
+      { key:'source', header:'Source', render: (r) => ce('span', { style:{ font:'400 12.5px/1.3 Inter', color:'#737373' } }, r.source) },
+      { key:'channels', header:'Channel', render: (r) => ce('span', { style:{ display:'inline-flex', gap:6, flexWrap:'wrap' } },
+          r.channels.map((k, i) => {
+            const m = chMap[k] || { label:k, color:'#737373', paths:['M12 2a10 10 0 1 0 10 10'] };
+            return ce('span', {
+              key:i,
+              title:m.label,
+              'aria-label':m.label,
+              style:{
+                width:24, height:24, borderRadius:999,
+                display:'inline-flex', alignItems:'center', justifyContent:'center',
+                background:'color-mix(in srgb, '+m.color+' 14%, #fff)',
+                color:m.color,
+                border:'1px solid color-mix(in srgb, '+m.color+' 28%, #fff)'
+              }
+            }, ce('svg', { width:14, height:14, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:1.8, strokeLinecap:'round', strokeLinejoin:'round', 'aria-hidden':'true', style:{ display:'block' } },
+              m.paths.map((d, j) => ce('path', { key:j, d }))
+            ));
+          })
+      )},
+      { key:'created', header:'Created', render: (r) => ce('span', { style:{ fontFamily:'Inter, sans-serif', fontSize:13, fontWeight:400, color:'#0A0A0A' } }, r.created) },
+      { key:'status', header:'Status', render: (r) => {
+          const m = statusMap[r.status] || { label:r.status, bg:'#F5F5F5', fg:'#171717' };
+          return ce('span', { style:{ display:'inline-flex', alignItems:'center', padding:'4px 10px', borderRadius:999, background:m.bg, color:m.fg, font:'600 12px/1 Inter', letterSpacing:'-0.01em', whiteSpace:'nowrap' } }, m.label);
+      }},
+      { key:'actions', header: ce('span', { style:{ display:'block', textAlign:'right' } }, 'Actions'), render: (r) => {
+          // User-supplied announcements icon — kept at its native 14x14 viewBox so nothing stitches.
+          const promoteIcon = ce('svg', { width:14, height:14, viewBox:'0 0 14 14', fill:'none', stroke:'currentColor', strokeWidth:0.875, strokeLinecap:'round', strokeLinejoin:'round' },
+            ce('path', { d:'M11.1854 2.40625C9.57965 3.22871 7.82922 3.73095 6.03167 3.885C5.63033 3.92 5.22317 3.9375 4.8125 3.9375H4.375C3.67881 3.9375 3.01113 4.21406 2.51884 4.70634C2.02656 5.19863 1.75 5.86631 1.75 6.5625C1.75 7.25869 2.02656 7.92637 2.51884 8.41865C3.01113 8.91094 3.67881 9.1875 4.375 9.1875H4.8125C5.22317 9.1875 5.63033 9.205 6.03167 9.24M6.03167 9.24C6.17925 9.80117 6.37233 10.3437 6.60625 10.8634C6.75033 11.1842 6.64125 11.5693 6.33617 11.7448L5.95292 11.9665C5.6315 12.152 5.21792 12.0347 5.06217 11.6976C4.6925 10.8979 4.41085 10.0603 4.22217 9.19975M6.03167 9.24C5.80241 8.36599 5.68673 7.46608 5.6875 6.5625C5.6875 5.63733 5.80708 4.74017 6.03167 3.885M6.03167 9.24C7.82922 9.39406 9.57964 9.8963 11.1854 10.7187M11.1854 2.40625C11.5028 3.42909 11.7012 4.48508 11.7769 5.55333C11.8248 6.22526 11.8248 6.89974 11.7769 7.57167C11.7012 8.63992 11.5028 9.69591 11.1854 10.7187C11.1166 10.9404 11.0425 11.1586 10.9637 11.375M11.1854 2.40625C11.117 2.18569 11.0431 1.96687 10.9637 1.75M11.7769 5.55333C12.0657 5.79425 12.25 6.15708 12.25 6.5625C12.25 6.96792 12.0657 7.33075 11.7769 7.57167' })
+          );
+          const promoteBtn = ce('button', {
+            type:'button', title:'Announcements', 'aria-label':'Announcements',
+            onClick: () => {},
+            style:{
+              width:28, height:28, borderRadius:'50%',
+              display:'inline-flex', alignItems:'center', justifyContent:'center',
+              background:'#F5F5F5', color:'#525252',
+              border:'1px solid #E5E5E5', cursor:'pointer', padding:0,
+              transition:'background .15s ease, color .15s ease, border-color .15s ease'
+            },
+            onMouseEnter: (e) => { e.currentTarget.style.background = 'color-mix(in srgb, #5A5FF2 10%, #fff)'; e.currentTarget.style.color = '#5A5FF2'; e.currentTarget.style.borderColor = 'color-mix(in srgb, #5A5FF2 35%, #E5E5E5)'; },
+            onMouseLeave: (e) => { e.currentTarget.style.background = '#F5F5F5'; e.currentTarget.style.color = '#525252'; e.currentTarget.style.borderColor = '#E5E5E5'; }
+          }, promoteIcon);
+          const editIcon = ce('svg', { width:14, height:14, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:1.8, strokeLinecap:'round', strokeLinejoin:'round' },
+            ce('path', { d:'M12 20h9' }),
+            ce('path', { d:'M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4z' })
+          );
+          const trashIcon = ce('svg', { width:14, height:14, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:1.8, strokeLinecap:'round', strokeLinejoin:'round' },
+            ce('polyline', { points:'3 6 5 6 21 6' }),
+            ce('path', { d:'M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2' }),
+            ce('line', { x1:10, y1:11, x2:10, y2:17 }),
+            ce('line', { x1:14, y1:11, x2:14, y2:17 })
+          );
+          const menu = NS.DropdownMenu
+            ? ce(NS.DropdownMenu, {
+                trigger: ce(DSButton, { variant:'ghost', size:'icon-sm', 'aria-label':'More' }, moreIcon),
+                align: 'end',
+                items: [
+                  { label:'Edit',   icon: editIcon,  onSelect: () => this.openEditCampaign(r) },
+                  { label:'Delete', icon: trashIcon, danger:true, onSelect: () => this.setState({ pendingDeleteRow: r }) },
+                ],
+              })
+            : ce(DSButton, { variant:'ghost', size:'icon-sm', 'aria-label':'More', onClick: () => this.openEditCampaign(r) }, moreIcon);
+          const metricsBtn = ce('button', {
+              type:'button', title:'Metrics', 'aria-label':'Metrics',
+              onClick: () => {},
+              style:{
+                width:28, height:28, borderRadius:'50%',
+                display:'inline-flex', alignItems:'center', justifyContent:'center',
+                background:'#F5F5F5', color:'#525252',
+                border:'1px solid #E5E5E5', cursor:'pointer', padding:0,
+                transition:'background .15s ease, color .15s ease, border-color .15s ease'
+              },
+              onMouseEnter: (e) => { e.currentTarget.style.background = 'color-mix(in srgb, #5A5FF2 10%, #fff)'; e.currentTarget.style.color = '#5A5FF2'; e.currentTarget.style.borderColor = 'color-mix(in srgb, #5A5FF2 35%, #E5E5E5)'; },
+              onMouseLeave: (e) => { e.currentTarget.style.background = '#F5F5F5'; e.currentTarget.style.color = '#525252'; e.currentTarget.style.borderColor = '#E5E5E5'; }
+            }, metricsIcon);
+          const tt = (btn, label) => ce('span', { className:'mini-tt', 'data-tt':label }, btn);
+          return ce('div', { style:{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:6 } },
+            tt(metricsBtn, 'Metrics'),
+            tt(promoteBtn, 'Announcements'),
+            menu
+          );
+      }},
+    ];
+
+    const subTabs = [
+      { value:'my',   label:'My campaigns' },
+      { value:'team', label:'Team campaigns' },
+    ];
+    const refreshOptions = [
+      { value:'Daily',   label:'Daily' },
+      { value:'Weekly',  label:'Weekly' },
+      { value:'Monthly', label:'Monthly' },
+    ];
+
+    return {
+      sidebarOpen,
+      toggleSidebar,
+      showEmail,
+      showCampaigns,
+      blkNameOpen: s.blkOpen.name,
+      blkAssignOpen: s.blkOpen.assign,
+      blkAudOpen: s.blkOpen.aud,
+      blkMilOpen: s.blkOpen.mil,
+      blkChOpen: s.blkOpen.ch,
+      blkInsOpen: s.blkOpen.ins,
+      blkRefOpen: s.blkOpen.ref,
+      blkNameCollapsed: !s.blkOpen.name,
+      blkAssignCollapsed: !s.blkOpen.assign,
+      blkAudCollapsed: !s.blkOpen.aud,
+      blkMilCollapsed: !s.blkOpen.mil,
+      blkChCollapsed: !s.blkOpen.ch,
+      blkInsCollapsed: !s.blkOpen.ins,
+      blkRefCollapsed: !s.blkOpen.ref,
+      blkNameChev: s.blkOpen.name ? 'chevron-up' : 'chevron-down',
+      blkAssignChev: s.blkOpen.assign ? 'chevron-up' : 'chevron-down',
+      blkAudChev: s.blkOpen.aud ? 'chevron-up' : 'chevron-down',
+      blkMilChev: s.blkOpen.mil ? 'chevron-up' : 'chevron-down',
+      blkChChev: s.blkOpen.ch ? 'chevron-up' : 'chevron-down',
+      blkInsChev: s.blkOpen.ins ? 'chevron-up' : 'chevron-down',
+      blkRefChev: s.blkOpen.ref ? 'chevron-up' : 'chevron-down',
+      toggleBlkName: () => this.setState({ blkOpen: Object.assign({}, s.blkOpen, { name: !s.blkOpen.name }) }),
+      toggleBlkAssign: () => this.setState({ blkOpen: Object.assign({}, s.blkOpen, { assign: !s.blkOpen.assign }) }),
+      toggleBlkAud: () => this.setState({ blkOpen: Object.assign({}, s.blkOpen, { aud: !s.blkOpen.aud }) }),
+      toggleBlkMil: () => this.setState({ blkOpen: Object.assign({}, s.blkOpen, { mil: !s.blkOpen.mil }) }),
+      toggleBlkCh: () => this.setState({ blkOpen: Object.assign({}, s.blkOpen, { ch: !s.blkOpen.ch }) }),
+      toggleBlkIns: () => this.setState({ blkOpen: Object.assign({}, s.blkOpen, { ins: !s.blkOpen.ins }) }),
+      toggleBlkRef: () => this.setState({ blkOpen: Object.assign({}, s.blkOpen, { ref: !s.blkOpen.ref }) }),
+      aiChatClass: s.aiChat ? 'on' : '',
+      aiSummariesClass: s.aiSummaries ? 'on' : '',
+      toggleAiChat: () => this.setState({ aiChat: !s.aiChat }),
+      toggleAiSummaries: () => this.setState({ aiSummaries: !s.aiSummaries }),
+      refreshCadence: s.refreshCadence,
+      refreshOptions,
+      setRefreshCadence: (e) => this.setState({ refreshCadence: e.target.value }),
+      setRefreshCadenceVal: (v) => this.setState({ refreshCadence: typeof v === 'string' ? v : (v && v.target ? v.target.value : v) }),
+      cadenceTrigger: ce('button', { type:'button', className:'aic-cad-trigger', 'aria-label':'Refresh cadence' },
+        ce('span', { className:'aic-cad-trigger__label' }, s.refreshCadence),
+        ce('svg', { width:14, height:14, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round', 'aria-hidden':'true' },
+          ce('polyline', { points:'6 9 12 15 18 9' })
+        )
+      ),
+      cadenceItems: refreshOptions.map(o => ({ label: o.label, onSelect: () => this.setState({ refreshCadence: o.value }) })),
+      subTabs,
+      campaignSub: s.campaignSub,
+      selectCampaignSub: (v) => this.setState({ campaignSub: v }),
+      campaignQuery: s.campaignQuery,
+      setCampaignQuery: (v) => this.setState({ campaignQuery: typeof v === 'string' ? v : (v && v.target ? v.target.value : '') }),
+      newCampaign: () => this.setState({ campaignPanelOpen: true, editingCampaignId: null }),
+      closeCampaignPanel: () => this.setState({ campaignPanelOpen: false, audienceOpen: false, assignOpen: false, clientResultsOpen: false, editingCampaignId: null }),
+      sheetTitle: s.editingCampaignId ? 'Edit campaign' : 'AI campaign',
+      sheetDesc: s.editingCampaignId ? 'Update targeting, channels and Mel\u2019s instructions.' : 'Assign, target and let Mel draft your outreach.',
+      isEditing: !!s.editingCampaignId,
+      pendingDeleteRow: s.pendingDeleteRow,
+      pendingDeleteName: s.pendingDeleteRow ? s.pendingDeleteRow.name : '',
+      pendingDeleteOpen: !!s.pendingDeleteRow,
+      deleteDesc: s.pendingDeleteRow ? ('\u201C' + s.pendingDeleteRow.name + '\u201D will be permanently deleted. Mel will stop all pending sends for this campaign. This cannot be undone.') : '',
+      cancelDelete: () => this.setState({ pendingDeleteRow: null }),
+      confirmDelete: () => {
+        const name = s.pendingDeleteRow ? s.pendingDeleteRow.name : 'Campaign';
+        this.setState({ pendingDeleteRow: null, toast: true, toastMessage: 'Campaign \u201C' + name + '\u201D deleted' }, () => setTimeout(() => this.setState({ toast: false }), 2400));
+      },
+      campaignPanelOpen: s.campaignPanelOpen,
+      campName: s.campName,
+      setCampName: (e) => this.setState({ campName: e && e.target ? e.target.value : '' }),
+
+      goalInput: s.goalInput,
+      setGoalInput: (e) => this.setState({ goalInput: e && e.target ? e.target.value : '' }),
+      melDrafting: s.melDrafting,
+      melDrafted: s.melDrafted,
+      goalIdle: !s.melDrafting,
+      goalSendDisabled: s.melDrafting || !s.goalInput.trim(),
+      submitGoal: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        if (!s.goalInput.trim() || s.melDrafting) return;
+        this.setState({ melDrafting: true });
+        setTimeout(() => {
+          const g = s.goalInput.trim();
+          const name = g.length > 48 ? g.slice(0, 46) + '…' : (g.charAt(0).toUpperCase() + g.slice(1));
+          this.setState({
+            melDrafting: false,
+            melDrafted: true,
+            campName: name,
+            audienceKey: 'all_buyers',
+            campChannels: { InApp: true, Email: true, Text: false },
+            instructionsText: 'Draft warm, concise follow-ups for '+ g +'. Reference the client\u2019s last activity, keep messages under 120 words, and end with one clear next step.'
+          });
+        }, 1100);
+      },
+
+      melBannerVisible: !s.melBannerDismissed,
+      dismissMelBanner: () => this.setState({ melBannerDismissed: true }),
+
+      assignOpen: s.assignOpen,
+      toggleAssign: () => this.setState({ assignOpen: !s.assignOpen }),
+      assignOptions: [
+        { key:'onlyMe',       label:'Only Me',        sub:'Only your clients will be prospected.' },
+        { key:'allAgents',    label:'All Agents',     sub:'Runs against every agent\u2019s book.' },
+        { key:'selectAgents', label:'Select Agents',  sub:'Pick specific teammates on the next step.' },
+      ].map(a => ({ ...a, on: s.assignTo === a.key, select: () => this.setState({ assignTo: a.key, assignOpen: false }) })),
+      agentInitials: 'TL',
+      agentName: s.assignTo === 'onlyMe' ? 'You (Team Leader)' : (s.assignTo === 'allAgents' ? 'All agents on Avengers' : (s.selectedAgentIds.length ? (s.selectedAgentIds.length + ' agent' + (s.selectedAgentIds.length === 1 ? '' : 's') + ' selected') : 'Choose agents…')),
+      agentSubtitle: s.assignTo === 'onlyMe' ? 'Only your clients will be prospected.' : (s.assignTo === 'allAgents' ? 'Runs against every agent\u2019s book.' : 'Pick specific teammates below.'),
+      showAgentPicker: s.assignTo === 'selectAgents',
+      selectedAgentsCount: s.selectedAgentIds.length,
+      agentQuery: s.agentQuery,
+      setAgentQuery: (e) => this.setState({ agentQuery: e && e.target ? e.target.value : '', agentResultsOpen: true }),
+      openAgentResults: () => this.setState({ agentResultsOpen: true }),
+      toggleAgentResults: () => this.setState({ agentResultsOpen: !s.agentResultsOpen }),
+      agentResultsOpen: s.agentResultsOpen,
+      agentChevronRotate: s.agentResultsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+      ...(() => {
+        const allAgents = [
+          { id:'ap', name:'Ava Park',     email:'ava.park@radius.com',    initials:'AP' },
+          { id:'jr', name:'Jordan Reyes', email:'jordan.reyes@radius.com',initials:'JR' },
+          { id:'mk', name:'Maya Kim',     email:'maya.kim@radius.com',    initials:'MK' },
+          { id:'sc', name:'Sam Cortez',   email:'sam.cortez@radius.com',  initials:'SC' },
+          { id:'dn', name:'Devon Nguyen', email:'devon.n@radius.com',     initials:'DN' },
+          { id:'lb', name:'Leah Brooks',  email:'leah.brooks@radius.com', initials:'LB' },
+        ];
+        const q = (s.agentQuery || '').trim().toLowerCase();
+        const filtered = q ? allAgents.filter(a => a.name.toLowerCase().includes(q) || a.email.toLowerCase().includes(q)) : allAgents;
+        const results = filtered.map(a => {
+          const on = s.selectedAgentIds.indexOf(a.id) !== -1;
+          return { ...a, on,
+            toggle: () => this.setState({ selectedAgentIds: on ? s.selectedAgentIds.filter(x => x !== a.id) : [...s.selectedAgentIds, a.id] })
+          };
+        });
+        const selectedAgentsView = allAgents.filter(a => s.selectedAgentIds.indexOf(a.id) !== -1).map(a => ({
+          ...a,
+          remove: () => this.setState({ selectedAgentIds: s.selectedAgentIds.filter(x => x !== a.id) })
+        }));
+        return {
+          agentResults: results,
+          agentResultsHave: results.length > 0,
+          agentResultsEmpty: results.length === 0,
+          hasSelectedAgents: selectedAgentsView.length > 0,
+          selectedAgentsView
+        };
+      })(),
+
+      clientQuery: s.clientQuery,
+      setClientQuery: (e) => this.setState({ clientQuery: e && e.target ? e.target.value : '', clientResultsOpen: true }),
+      openClientResults: () => this.setState({ clientResultsOpen: true }),
+      closeClientResults: () => this.setState({ clientResultsOpen: false }),
+      toggleClientResults: () => this.setState({ clientResultsOpen: !s.clientResultsOpen }),
+      clientResultsChevronRotate: s.clientResultsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+      clientResultsOpen: s.clientResultsOpen,
+      ...(() => {
+          const q = (s.clientQuery || '').trim().toLowerCase();
+          const filtered = q ? this.allClients.filter(c => (
+            c.name.toLowerCase().includes(q) ||
+            c.email.toLowerCase().includes(q) ||
+            c.phone.replace(/\D/g,'').includes(q.replace(/\D/g,'')) && q.replace(/\D/g,'').length >= 2 ||
+            (c.tag || '').toLowerCase().includes(q)
+          )) : this.allClients;
+          const visible = filtered.slice(0, 8);
+          const initials = (n) => n.split(/\s+/).map(p => p[0]).slice(0,2).join('').toUpperCase();
+          const clientResults = visible.map(c => ({
+            id: c.id,
+            name: c.name,
+            meta: c.email + ' · ' + c.phone,
+            initials: initials(c.name),
+            tag: c.tag,
+            on: s.selectedClientIds.includes(c.id),
+            toggle: () => {
+              const has = s.selectedClientIds.includes(c.id);
+              this.setState({ selectedClientIds: has ? s.selectedClientIds.filter(x => x !== c.id) : [...s.selectedClientIds, c.id] });
+            }
+          }));
+          const selectedObjs = s.selectedClientIds.map(id => this.allClients.find(c => c.id === id)).filter(Boolean);
+          const selShown = selectedObjs.slice(0, 8).map((c, i) => ({
+            name: c.name,
+            remove: () => this.setState({ selectedClientIds: s.selectedClientIds.filter(x => x !== c.id) })
+          }));
+          return {
+            clientResults,
+            clientResultsHave: filtered.length > 0,
+            clientResultsEmpty: filtered.length === 0 && q.length > 0,
+            clientResultsSummary: q
+              ? ('Showing ' + Math.min(visible.length, filtered.length) + ' of ' + filtered.length + ' matches')
+              : ('Browse ' + this.allClients.length + ' clients — type to narrow'),
+            selectedClientsView: selShown,
+            selectedClientsCount: selectedObjs.length,
+            hasSelectedClients: selectedObjs.length > 0,
+            selectedOverflow: selectedObjs.length > 8,
+            selectedOverflowCount: Math.max(0, selectedObjs.length - 8),
+            selectedAudienceType: selectedObjs.length > 0 ? 'client' : null,
+          };
+      })(),
+
+      audienceOpen: s.audienceOpen,
+      toggleAudience: () => this.setState({ audienceOpen: !s.audienceOpen }),
+      audienceGroups: [
+        { key:'all_buyers',  label:'All buyers',            sub:'42 clients tagged as buyers',   kind:'buyer'  },
+        { key:'all_sellers', label:'All sellers',           sub:'18 clients tagged as sellers',  kind:'seller' },
+        { key:'past_clients',label:'Past clients',          sub:'96 closed transactions · 12mo', kind:'past'   },
+        { key:'sphere',      label:'Sphere of influence',   sub:'54 saved contacts',             kind:'sphere' },
+      ].map(g => ({ ...g, on: s.audienceKey === g.key, select: () => this.setState({ audienceKey: g.key, audienceOpen: false }) })),
+      audienceSmart: [
+        { key:'maple_watch', label:'Maple St watchers',      sub:'Smart list · 9 clients',      kind:'buyer'  },
+        { key:'condo_val',   label:'Downtown condo owners',  sub:'Smart list · 27 clients',     kind:'seller' },
+        { key:'stale_leads', label:'Stale leads > 60 days',  sub:'Smart list · 34 clients',     kind:'buyer'  },
+      ].map(g => ({ ...g, on: s.audienceKey === g.key, select: () => this.setState({ audienceKey: g.key, audienceOpen: false }) })),
+      audienceLabel: ({
+        all_buyers:'All buyers', all_sellers:'All sellers', past_clients:'Past clients', sphere:'Sphere of influence',
+        maple_watch:'Maple St watchers', condo_val:'Downtown condo owners', stale_leads:'Stale leads > 60 days'
+      })[s.audienceKey] || 'Select audience',
+      audienceSubtitle: ({
+        all_buyers:'42 clients tagged as buyers', all_sellers:'18 clients tagged as sellers',
+        past_clients:'96 closed transactions · 12mo', sphere:'54 saved contacts',
+        maple_watch:'Smart list · 9 clients', condo_val:'Smart list · 27 clients', stale_leads:'Smart list · 34 clients'
+      })[s.audienceKey] || '',
+
+      ...(() => {
+        const kindByAud = { all_buyers:'buyer', maple_watch:'buyer', stale_leads:'buyer', all_sellers:'seller', condo_val:'seller', past_clients:'past', sphere:'sphere' };
+        const effectiveKind = s.selectedClientIds.length > 0 ? 'mixed' : (kindByAud[s.audienceKey] || null);
+        const sets = {
+          buyer:  ['Create a search board','Schedule property showing','Schedule client meetings','Apply for mortgage','Promote and share consumer app'],
+          seller: ['Listing appointment','Listing signed','First showing','Offer received','Under contract','Closed'],
+          past:   ['Anniversary of close','Home valuation refresh','Refi-window check','Referral ask'],
+          sphere: ['Quarterly check-in','Birthday','Anniversary','Market update'],
+          mixed:  ['First touch','Discovery call','Showing / listing appointment','Offer stage','Under contract','Closed'],
+        };
+        const list = effectiveKind ? sets[effectiveKind] : null;
+        const chips = list ? list.map((label, i) => ({
+          label,
+          n: String(i + 1).padStart(2,'0'),
+          on: !!s.milestonesSelected[label],
+          toggle: () => this.setState({ milestonesSelected: { ...s.milestonesSelected, [label]: !s.milestonesSelected[label] } })
+        })) : [];
+        const selectedCount = Object.values(s.milestonesSelected).filter(Boolean).length;
+        return {
+          milestoneChips: chips,
+          milestonesHaveOptions: !!list,
+          milestonesNoOptions: !list,
+          milestonesSelectedCount: selectedCount,
+          milestonesHint: 'Pick a buyer or seller audience (or a client with a status) and Mel will surface the right milestones here.',
+          postCloseNurture: s.postCloseNurture,
+          postCloseNurtureTrackBg: s.postCloseNurture ? '#5A5FF2' : '#E5E5E5',
+          postCloseNurtureThumbLeft: s.postCloseNurture ? '18px' : '2px',
+          togglePostCloseNurture: () => this.setState({ postCloseNurture: !s.postCloseNurture })
+        };
+      })(),
+
+      reminderChips: [{ label:'Wish anniversary' },{ label:'Birthday' }],
+
+      channelChips: [
+        { key:'InApp', label:'In-app', icon:'message-circle', hint:'Sends the reminder as a Radius in-app chat message inside the client\u2019s Radius app.' },
+        { key:'Email', label:'Email',  icon:'mail',           hint:'Sends the reminder as an email to the client\u2019s primary address.' },
+        { key:'Text',  label:'Text',   icon:'message-square', hint:'Sends the reminder as an SMS to the client\u2019s mobile number.' },
+      ].map(c => ({
+        ...c,
+        on: !!s.campChannels[c.key],
+        toggle: () => this.setState({ campChannels: { ...s.campChannels, [c.key]: !s.campChannels[c.key] } })
+      })),
+
+      tplChips: [
+        { key:'comm',   label:'Communication style' },
+        { key:'script', label:'My script' },
+        { key:'follow', label:'Follow-up workflow' },
+        { key:'bounds', label:'Boundaries & handoff' },
+        { key:'all',    label:'All (12)' },
+      ].map(t => ({ ...t, on: t.key === 'comm' ? !!s.subOpen : !!s.tplSelected[t.key], select: t.key === 'comm' ? () => this.setState({ subOpen: !s.subOpen }) : () => this.appendTpl(t) })),
+      subOpen: s.subOpen,
+      tplSubChips: [
+        { key:'concise', label:'Concise & channel-aware' },
+        { key:'warm',    label:'Warm local expert' },
+        { key:'biling',  label:'Bilingual / formal' },
+      ].map(t => ({ ...t, on: !!s.tplSelected[t.key], select: () => this.appendTpl(t) })),
+      instructionsText: s.instructionsText,
+      setInstructionsText: (e) => this.setState({ instructionsText: (e && e.target ? e.target.value : '').slice(0, 2000) }),
+      instructionsMax: 2000,
+      instructionsCount: s.instructionsText.length,
+
+      refFiles: s.refFiles.map((f, i) => ({
+        ...f,
+        remove: () => this.setState({ refFiles: s.refFiles.filter((_, j) => j !== i) })
+      })),
+      hasRefFiles: s.refFiles.length > 0,
+      refEmpty: s.refFiles.length === 0,
+      showInlineAdd: s.refFiles.length > 0 && s.refFiles.length <= 3,
+      showHeaderAdd: s.refFiles.length > 3,
+      refCountLabel: s.refFiles.length > 0 ? String(s.refFiles.length) : '',
+      refHintClass: s.refFiles.length > 3 && !s.refHintDismissed ? 'aic-hd-add--hint' : '',
+      dismissRefHint: (e) => { if (e) { if (e.stopPropagation) e.stopPropagation(); if (e.preventDefault) e.preventDefault(); if (e.nativeEvent && e.nativeEvent.stopImmediatePropagation) e.nativeEvent.stopImmediatePropagation(); } this.setState({ refHintDismissed: true }); if (this._refHintTimer) { clearTimeout(this._refHintTimer); this._refHintTimer = null; } },
+      refRowRef: (el) => { this._refRowEl = el; },
+      scrollFilesPrev: () => { if (this._refRowEl) this._refRowEl.scrollBy({ left: -220, behavior: 'smooth' }); },
+      scrollFilesNext: () => { if (this._refRowEl) this._refRowEl.scrollBy({ left:  220, behavior: 'smooth' }); },
+      addMockFile: () => {
+        const samples = [
+          { name:'Buyer_playbook.pdf',    size:'1.2 MB' },
+          { name:'Listing_script.docx',   size:'86 KB'  },
+          { name:'CMA_template.pdf',      size:'640 KB' },
+        ];
+        const next = samples[s.refFiles.length % samples.length];
+        this.setState({ refFiles: [...s.refFiles, next], refHintDismissed: false });
+        if (this._refHintTimer) clearTimeout(this._refHintTimer);
+        this._refHintTimer = setTimeout(() => this.setState({ refHintDismissed: true }), 700);
+      },
+
+      campaignPanelFooter: ce('div', { className:'aic-sheet-footer aic-indigo-cta', style:{ margin:'-12px -24px -20px', padding:'12px 24px' } },
+        ce(RadiusUIDesignSystem_c7220b.Button, { variant:'ghost', size:'sm', onClick: () => this.setState({ campaignPanelOpen: false, audienceOpen: false, assignOpen: false, clientResultsOpen: false, editingCampaignId: null }) }, 'Cancel'),
+        ce(RadiusUIDesignSystem_c7220b.Button, { variant:'default', size:'sm', disabled: !s.campName.trim(), onClick: () => {
+          if (!s.campName.trim()) return;
+          const editing = !!s.editingCampaignId;
+          const name = s.campName.trim();
+          this.setState({
+            campaignPanelOpen: false, audienceOpen: false, assignOpen: false, clientResultsOpen: false,
+            toast: true,
+            toastMessage: 'Campaign \u201C' + name + (editing ? '\u201D updated' : '\u201D created'),
+            campName: '', goalInput: '', instructionsText: '', melDrafted: false, tplSelected: {}, subOpen: false, refFiles: [],
+            selectedClientIds: [], milestonesSelected: {}, clientQuery: '', editingCampaignId: null
+          }, () => setTimeout(() => this.setState({ toast: false }), 2400));
+        } }, s.editingCampaignId ? 'Save changes' : 'Add campaign')
+      ),
+      toastMessage: s.toastMessage,
+      plusIcon,
+      campaignColumns,
+      campaigns,
+      hasCampaigns: campaigns.length > 0,
+      isEmpty: campaigns.length === 0,
+      tabs,
+      editorRef: (el) => { this.editor = el; },
+      onEdit: () => { if (this.editor) { this.setState({ sigHtml: this.editor.innerHTML }); this.markDirty(); } },
+      onKey: () => {},
+      onPaste: () => this.markDirty(),
+      toggleBold: () => this.exec('bold'),
+      toggleItalic: () => this.exec('italic'),
+      toggleUnderline: () => this.exec('underline'),
+      fmtBold: s.fmtBold, fmtItalic: s.fmtItalic, fmtUnderline: s.fmtUnderline,
+      openColor: () => this.setState({ colorOpen: !s.colorOpen, linkOpen: false }),
+      colorOpen: s.colorOpen,
+      colorSwatchRef: (el) => { this.colorSwatch = el; if (el) el.style.background = s.color; },
+      pickColor: (e) => {
+        const hex = e.currentTarget.getAttribute('data-hex');
+        this.setState({ color: hex, colorOpen: false });
+        if (this.colorSwatch) this.colorSwatch.style.background = hex;
+        this.exec('foreColor', hex);
+      },
+      fontFamily: s.fontFamily,
+      fontSize: s.fontSize,
+      fontTrigger: React.createElement('button', { className:'tb-sel', title:'Font family' },
+        React.createElement('span', null, s.fontFamily),
+        React.createElement('svg', { width:10, height:10, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round' },
+          React.createElement('polyline', { points:'6 9 12 15 18 9' }))
+      ),
+      fontItems: ['Inter','Geist','Georgia','Arial'].map(name => ({
+        label: name,
+        onSelect: () => { this.setState({ fontFamily: name }); this.exec('fontName', name); }
+      })),
+      sizeTrigger: React.createElement('button', { className:'tb-sel', title:'Text size' },
+        React.createElement('span', null, s.fontSize),
+        React.createElement('svg', { width:10, height:10, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth:2, strokeLinecap:'round', strokeLinejoin:'round' },
+          React.createElement('polyline', { points:'6 9 12 15 18 9' }))
+      ),
+      sizeItems: [['Small','2'],['Normal','3'],['Large','5'],['Huge','7']].map(([name, val]) => ({
+        label: name,
+        onSelect: () => { this.setState({ fontSize: name }); this.exec('fontSize', val); }
+      })),
+      openLink: () => this.setState({ linkOpen: !s.linkOpen, colorOpen: false }),
+      linkOpen: s.linkOpen,
+      linkUrl: s.linkUrl,
+      linkText: s.linkText,
+      onLinkUrl: (e) => this.setState({ linkUrl: e.target.value }),
+      onLinkText: (e) => this.setState({ linkText: e.target.value }),
+      closeLink: () => this.setState({ linkOpen: false, linkUrl: '', linkText: '' }),
+      applyLink: () => {
+        if (s.linkUrl) {
+          const txt = s.linkText || s.linkUrl;
+          const html = `<a href="${s.linkUrl}">${txt}</a>`;
+          if (this.editor) { this.editor.focus(); document.execCommand('insertHTML', false, html); this.setState({ sigHtml: this.editor.innerHTML }); }
+        }
+        this.setState({ linkOpen: false, linkUrl: '', linkText: '', dirty: true });
+      },
+      swxDefaultClass: s.useDefault ? 'on' : '',
+      toggleDefault: () => { this.setState({ useDefault: !s.useDefault, dirty: true }); },
+      templates,
+      dirty: s.dirty,
+      saving: s.saving,
+      saveDisabled,
+      saveLabel: s.saving ? 'Saving…' : 'Save changes',
+      saveChanges: () => {
+        if (saveDisabled) return;
+        this.setState({ saving: true });
+        setTimeout(() => this.setState({ saving: false, dirty: false, toast: true, toastMessage: 'Signature saved' }, () => {
+          setTimeout(() => this.setState({ toast: false }), 2200);
+        }), 700);
+      },
+      discardChanges: () => {
+        if (this.editor) this.editor.innerHTML = this.state.sigHtml;
+        this.setState({ dirty: false });
+      },
+      toastShown: s.toast,
+      sigHtmlObj
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!-- @dsCard group="Components" viewport="700x420" name="Overlays — Popover, HoverCard, Sheet" subtitle="Anchored panels and edge sheets over a scrim" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:20px;background:var(--background)}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.lbl{font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--muted-foreground);text-transform:uppercase;margin:0 0 8px}</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Popover, HoverCard, Sheet, Button, Avatar, Badge, Field, Input, Icon, Separator } = window.RadiusUIDesignSystem_c7220b;
+function Demo(){
+  const [sheet,setSheet]=React.useState(false);
+  return (
+    <div>
+      <p className="lbl">Popover · HoverCard · Sheet</p>
+      <div className="row">
+        <Popover trigger={<Button variant="outline" rightIcon={<Icon name="chevron-down"/>}>Quick filter</Button>}>
+          <Field label="Deal stage"><Input placeholder="Any stage" /></Field>
+          <div style={{display:"flex",gap:8,marginTop:12}}><Button size="sm">Apply</Button><Button variant="ghost" size="sm">Reset</Button></div>
+        </Popover>
+        <HoverCard trigger={<Button variant="ghost" leftIcon={<Avatar initials="JN" size="xs"/>}>Jordan Nguyen</Button>}>
+          <div style={{display:"flex",gap:10}}>
+            <Avatar initials="JN" size="lg"/>
+            <div><div style={{fontWeight:600,fontSize:14}}>Jordan Nguyen</div><div style={{color:"var(--muted-foreground)",fontSize:12}}>Buyer · Under contract</div>
+            <div style={{marginTop:8}}><Badge variant="blue" dot>1420 Camino Real</Badge></div></div>
+          </div>
+        </HoverCard>
+        <Button onClick={()=>setSheet(true)}>Open sheet</Button>
+      </div>
+      <Sheet open={sheet} onClose={()=>setSheet(false)} title="Filter transactions" description="Narrow the pipeline by side, stage and close date."
+        footer={<div style={{display:"flex",justifyContent:"flex-end",gap:8}}><Button variant="ghost" onClick={()=>setSheet(false)}>Cancel</Button><Button onClick={()=>setSheet(false)}>Apply filters</Button></div>}>
+        <Field label="Side"><Input placeholder="Buyer, seller, lease"/></Field>
+        <div style={{height:12}}/>
+        <Field label="Stage"><Input placeholder="Any stage"/></Field>
+      </Sheet>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!-- @dsCard group="Radius CRM" viewport="1360x900" name="Radius CRM — agent workspace" subtitle="Dashboard, transactions & client profile with Mel" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Radius CRM</title>
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body{margin:0;background:var(--muted)}
+  #root{height:100vh}
+  .app{display:grid;grid-template-columns:236px 1fr;height:100vh;background:var(--background)}
+  /* Sidebar */
+  .side{background:var(--sidebar);border-right:1px solid var(--sidebar-border);display:flex;flex-direction:column;padding:14px 12px}
+  .brand{display:flex;align-items:center;gap:9px;padding:6px 8px 16px}
+  .brand img.mk{height:24px}.brand img.wm{height:17px}
+  .navsec{font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--muted-foreground);text-transform:uppercase;padding:12px 8px 4px}
+  .nav{display:flex;align-items:center;gap:10px;height:34px;padding:0 8px;border-radius:var(--radius-md);color:var(--sidebar-foreground);font-size:13.5px;font-weight:500;cursor:pointer;border:none;background:none;width:100%;text-align:left}
+  .nav:hover{background:var(--sidebar-accent)}
+  .nav[data-active="true"]{background:var(--sidebar-accent);color:var(--foreground)}
+  .nav svg{color:var(--muted-foreground)}
+  .nav[data-active="true"] svg{color:var(--foreground)}
+  .nav .count{margin-left:auto;font-size:11px;font-family:var(--font-mono);color:var(--muted-foreground)}
+  .side-foot{margin-top:auto;display:flex;flex-direction:column;gap:2px}
+  .userrow{display:flex;align-items:center;gap:10px;padding:8px;border-radius:var(--radius-md)}
+  .userrow:hover{background:var(--sidebar-accent)}
+  .userrow .nm{font-size:13px;font-weight:600;line-height:1.2}
+  .userrow .rl{font-size:11px;color:var(--muted-foreground)}
+  /* Main */
+  .main{display:flex;flex-direction:column;overflow:hidden}
+  .topbar{height:56px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;padding:0 22px;flex-shrink:0}
+  .topbar h1{font-size:16px;font-weight:600;margin:0}
+  .search{margin-left:12px;position:relative;flex:1;max-width:340px}
+  .search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted-foreground)}
+  .search input{padding-left:32px}
+  .topright{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .content{overflow:auto;padding:22px;flex:1}
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:16px 18px}
+  .stat .k{font-size:12px;color:var(--muted-foreground);display:flex;align-items:center;gap:6px}
+  .stat .v{font-family:var(--font-mono);font-size:26px;font-weight:600;margin-top:8px;letter-spacing:-.01em}
+  .stat .d{font-size:12px;margin-top:4px;display:flex;align-items:center;gap:4px}
+  .up{color:var(--status-green)}
+  .two{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card)}
+  .panel-h{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
+  .panel-h h3{font-size:14px;font-weight:600;margin:0}
+  .panel-b{padding:6px 18px 12px}
+  .mel-card{border:1px solid transparent;border-radius:var(--radius-card);background:var(--card);position:relative;padding:16px 18px;overflow:hidden}
+  .mel-card::before{content:"";position:absolute;inset:0;padding:1px;border-radius:var(--radius-card);background:var(--mel-gradient);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+  .mel-h{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+  .mel-h img{width:22px;height:22px}
+  .mel-h b{font-size:13.5px}
+  .mel-card p{font-size:13px;color:var(--foreground);line-height:1.5;margin:0 0 12px}
+  .task{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .task:last-child{border-bottom:none}
+  .task .meta{margin-left:auto;font-size:11px;color:var(--muted-foreground);font-family:var(--font-mono)}
+  .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .cell-strong{font-weight:600}
+  .sub{color:var(--muted-foreground);font-size:12px}
+  /* Client profile */
+  .prof-head{display:flex;align-items:flex-start;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:18px 20px;margin-bottom:16px}
+  .prof-actions{display:flex;gap:8px;margin-left:auto}
+  .timeline{position:relative;padding-left:26px}
+  .tl-item{position:relative;padding:0 0 18px}
+  .tl-item::before{content:"";position:absolute;left:-19px;top:2px;width:10px;height:10px;border-radius:999px;background:var(--background);border:2px solid var(--neutral-300)}
+  .tl-item::after{content:"";position:absolute;left:-15px;top:14px;bottom:-2px;width:2px;background:var(--border)}
+  .tl-item:last-child::after{display:none}
+  .tl-item .h{display:flex;align-items:center;gap:8px;font-size:13px}
+  .tl-item .b{font-size:12.5px;color:var(--muted-foreground);margin-top:3px;line-height:1.5}
+  .tl-item .tm{font-size:11px;color:var(--muted-foreground);font-family:var(--font-mono);margin-left:auto}
+  .mod{margin-bottom:14px}
+  .mod .kv{display:flex;justify-content:space-between;padding:7px 0;font-size:13px;border-bottom:1px solid var(--border)}
+  .mod .kv:last-child{border-bottom:none}
+  .mod .kv .l{color:var(--muted-foreground)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const D = window.RadiusUIDesignSystem_c7220b;
+const { Button, Badge, Avatar, AvatarGroup, Card, Table, Tabs, Input, Icon, DropdownMenu, Progress, Separator, Alert, Empty, Tooltip } = D;
+
+const NAV_MAIN = [
+  ["dashboard","Dashboard","layout-dashboard"],
+  ["transactions","Transactions","file-text","12"],
+  ["clients","Clients","users","148"],
+  ["documents","Documents","folder"],
+  ["commissions","Commissions","dollar-sign"],
+];
+const NAV_GROW = [
+  ["prospecting","Prospecting","handshake"],
+  ["academy","Academy","star"],
+];
+
+function Sidebar({view,setView}){
+  const item=([id,label,icon,count])=>(
+    <button key={id} className="nav" data-active={view===id} onClick={()=>setView(id)}>
+      <Icon name={icon} size={18}/><span>{label}</span>{count&&<span className="count">{count}</span>}
+    </button>
+  );
+  return (
+    <aside className="side">
+      <div className="brand"><img className="mk" src="../../assets/logo-mark-dark.svg" alt=""/><img className="wm" src="../../assets/logo-wordmark-ink.svg" alt="Radius"/></div>
+      <div className="navsec">Workspace</div>
+      {NAV_MAIN.map(item)}
+      <div className="navsec">Grow</div>
+      {NAV_GROW.map(item)}
+      <div className="side-foot">
+        <button className="nav"><Icon name="settings" size={18}/><span>Settings</span></button>
+        <Separator/>
+        <div className="userrow">
+          <Avatar initials="AD" size="sm" status/>
+          <div><div className="nm">Ana Delacroix</div><div className="rl">Team lead · Meridian</div></div>
+          <Icon name="chevrons-up-down" size={15} style={{marginLeft:"auto",color:"var(--muted-foreground)"}}/>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function Topbar({title}){
+  return (
+    <header className="topbar">
+      <h1>{title}</h1>
+      <div className="search"><Icon name="search" size={16}/><Input placeholder="Search clients, deals, documents…"/></div>
+      <div className="topright">
+        <div className="mel-capsule" style={{display:"inline-flex",alignItems:"center",gap:8,padding:"6px 12px 6px 8px",borderRadius:999,position:"relative",background:"var(--card)",cursor:"pointer",boxShadow:"var(--shadow-xs)"}}>
+          <span style={{position:"absolute",inset:-1.5,borderRadius:999,background:"var(--mel-gradient)",zIndex:0}}></span>
+          <span style={{position:"absolute",inset:1,borderRadius:999,background:"var(--card)",zIndex:0}}></span>
+          <img src="../../assets/mel-icon.svg" style={{width:20,height:20,position:"relative"}}/>
+          <span style={{fontSize:13,fontWeight:500,position:"relative"}}>Ask Mel</span>
+        </div>
+        <Button variant="outline" size="icon" aria-label="Notifications"><Icon name="bell"/></Button>
+        <Button leftIcon={<Icon name="plus"/>}>New deal</Button>
+      </div>
+    </header>
+  );
+}
+
+function Stat({k,icon,v,delta}){
+  return (
+    <div className="stat">
+      <div className="k"><Icon name={icon} size={14}/>{k}</div>
+      <div className="v">{v}</div>
+      {delta&&<div className="d up"><Icon name="trending-up" size={13}/>{delta}</div>}
+    </div>
+  );
+}
+
+function Dashboard(){
+  const cols=[
+    {key:"client",header:"Client",render:r=><div><div className="cell-strong">{r.client}</div><div className="sub">{r.side}</div></div>},
+    {key:"stage",header:"Stage",render:r=><Badge variant={r.tint} dot>{r.stage}</Badge>},
+    {key:"close",header:"Est. close"},
+    {key:"volume",header:"Volume",numeric:true},
+    {key:"gci",header:"GCI",numeric:true},
+    {key:"a",header:"",render:r=><DropdownMenu align="end" trigger={<Button variant="ghost" size="icon" aria-label="Actions"><Icon name="more-horizontal"/></Button>} items={[{label:"Open transaction",icon:<Icon name="external-link"/>},{label:"Log a call",icon:<Icon name="phone"/>},{type:"separator"},{label:"Archive",icon:<Icon name="trash-2"/>,danger:true}]}/>},
+  ];
+  const rows=[
+    {id:1,client:"Nguyen residence",side:"Buyer side",stage:"Under contract",tint:"blue",close:"Aug 14",volume:"$1,240,000",gci:"$31,000"},
+    {id:2,client:"Okafor purchase",side:"Buyer side",stage:"Closing",tint:"green",close:"Aug 2",volume:"$865,000",gci:"$21,625"},
+    {id:3,client:"Delgado listing",side:"Seller side",stage:"Prospecting",tint:"amber",close:"Sep 20",volume:"$2,100,000",gci:"$52,500"},
+    {id:4,client:"Harper lease",side:"Lease",stage:"Active",tint:"green",close:"Jul 29",volume:"$48,000",gci:"$3,600"},
+    {id:5,client:"Sokolov estate",side:"Seller side",stage:"Overdue task",tint:"red",close:"Aug 9",volume:"$3,450,000",gci:"$86,250"},
+  ];
+  return (
+    <>
+      <div className="stat-grid">
+        <Stat k="Active pipeline" icon="briefcase" v="$7.7M" delta="12% MoM"/>
+        <Stat k="Projected GCI" icon="dollar-sign" v="$195K" delta="8% MoM"/>
+        <Stat k="Closings this month" icon="circle-check-big" v="6"/>
+        <Stat k="New leads (7d)" icon="users" v="23" delta="5 today"/>
+      </div>
+      <div className="two">
+        <div className="panel">
+          <div className="panel-h"><h3>Pipeline</h3>
+            <div style={{display:"flex",gap:8}}>
+              <Button variant="outline" size="sm" leftIcon={<Icon name="filter"/>}>Filter</Button>
+              <Button variant="ghost" size="sm" rightIcon={<Icon name="arrow-right"/>}>View all</Button>
+            </div>
+          </div>
+          <div style={{padding:"0 6px"}}><Table columns={cols} data={rows}/></div>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:16}}>
+          <div className="mel-card">
+            <div className="mel-h"><img src="../../assets/mel-icon.svg"/><b>Mel</b><Badge variant="indigo" style={{marginLeft:"auto"}}>Daily brief</Badge></div>
+            <p>3 clients are ready to nurture and the Sokolov estate has an overdue disclosure task. Want me to draft follow-ups and reorder your day around the Aug 2 closing?</p>
+            <div style={{display:"flex",gap:8}}><Button size="sm">Start nurturing</Button><Button variant="ghost" size="sm">Not now</Button></div>
+          </div>
+          <div className="panel">
+            <div className="panel-h"><h3>Today's tasks</h3><Badge variant="secondary">5</Badge></div>
+            <div className="panel-b">
+              {[["Call the Nguyen lender","check","Now"],["Send Okafor closing packet","file-text","11:00"],["Review Delgado net sheet","dollar-sign","1:30"],["Confirm Sokolov disclosure","triangle-alert","Overdue"],["Text Harper about walkthrough","message-square","4:00"]].map(([t,ic,tm],i)=>(
+                <div className="task" key={i}><input type="checkbox" className="rds-checkbox"/><Icon name={ic} size={15} style={{color:"var(--muted-foreground)"}}/><span>{t}</span><span className="meta" style={tm==="Overdue"?{color:"var(--destructive)"}:null}>{tm}</span></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Transactions(){
+  const [tab,setTab]=React.useState("all");
+  const cols=[
+    {key:"client",header:"Client",render:r=><div><div className="cell-strong">{r.client}</div><div className="sub">{r.addr}</div></div>},
+    {key:"side",header:"Side"},
+    {key:"stage",header:"Stage",render:r=><Badge variant={r.tint} dot>{r.stage}</Badge>},
+    {key:"tc",header:"TC",render:r=><Avatar initials={r.tc} size="xs"/>},
+    {key:"close",header:"Close date"},
+    {key:"price",header:"Price",numeric:true},
+    {key:"gci",header:"GCI",numeric:true},
+  ];
+  const rows=[
+    {id:1,client:"Nguyen residence",addr:"1420 Camino Real",side:"Buyer",stage:"Under contract",tint:"blue",tc:"RP",close:"Aug 14",price:"$1,240,000",gci:"$31,000"},
+    {id:2,client:"Okafor purchase",addr:"88 Harbor View Dr",side:"Buyer",stage:"Closing",tint:"green",tc:"RP",close:"Aug 2",price:"$865,000",gci:"$21,625"},
+    {id:3,client:"Delgado listing",addr:"3007 Juniper Ln",side:"Seller",stage:"Prospecting",tint:"amber",tc:"MK",close:"Sep 20",price:"$2,100,000",gci:"$52,500"},
+    {id:4,client:"Harper lease",addr:"210 Marsh St #4",side:"Lease",stage:"Active",tint:"green",tc:"MK",close:"Jul 29",price:"$48,000",gci:"$3,600"},
+    {id:5,client:"Sokolov estate",addr:"9 Vista Grande",side:"Seller",stage:"Overdue task",tint:"red",tc:"RP",close:"Aug 9",price:"$3,450,000",gci:"$86,250"},
+    {id:6,client:"Bianchi condo",addr:"55 Wharf Plaza #1802",side:"Buyer",stage:"Under contract",tint:"blue",tc:"MK",close:"Aug 22",price:"$720,000",gci:"$18,000"},
+  ];
+  return (
+    <>
+      <div className="toolbar">
+        <Tabs value={tab} onChange={setTab} tabs={[{value:"all",label:"All"},{value:"buy",label:"Buyer side"},{value:"sell",label:"Seller side"},{value:"lease",label:"Lease"}]}/>
+        <div style={{marginLeft:"auto",display:"flex",gap:8}}>
+          <Button variant="outline" size="sm" leftIcon={<Icon name="sliders-horizontal"/>}>Columns</Button>
+          <Button variant="outline" size="sm" leftIcon={<Icon name="download"/>}>Export</Button>
+        </div>
+      </div>
+      <div className="panel"><div style={{padding:"0 6px"}}><Table columns={cols} data={rows}/></div></div>
+    </>
+  );
+}
+
+function ClientProfile(){
+  return (
+    <>
+      <div className="prof-head">
+        <Avatar initials="JN" size="xl"/>
+        <div>
+          <div style={{display:"flex",alignItems:"center",gap:10}}><h2 style={{margin:0,fontSize:20,fontWeight:600}}>Jordan Nguyen</h2><Badge variant="blue" dot>Under contract</Badge></div>
+          <div className="sub" style={{marginTop:4,display:"flex",gap:14}}><span><Icon name="map-pin" size={13} style={{verticalAlign:"-2px"}}/> 1420 Camino Real</span><span><Icon name="phone" size={13} style={{verticalAlign:"-2px"}}/> (415) 555-0128</span><span><Icon name="mail" size={13} style={{verticalAlign:"-2px"}}/> jordan@acme.com</span></div>
+        </div>
+        <div className="prof-actions">
+          <Tooltip label="Call"><Button variant="outline" size="icon" aria-label="Call"><Icon name="phone"/></Button></Tooltip>
+          <Tooltip label="Email"><Button variant="outline" size="icon" aria-label="Email"><Icon name="mail"/></Button></Tooltip>
+          <Tooltip label="Text"><Button variant="outline" size="icon" aria-label="Text"><Icon name="message-square"/></Button></Tooltip>
+          <Button leftIcon={<Icon name="plus"/>}>Log activity</Button>
+        </div>
+      </div>
+      <div className="two">
+        <div className="panel">
+          <div className="panel-h"><Tabs defaultValue="activity" variant="underline" tabs={[{value:"activity",label:"Activity"},{value:"overview",label:"Overview"},{value:"docs",label:"Documents"},{value:"notes",label:"Notes"}]}/></div>
+          <div className="panel-b" style={{paddingTop:16}}>
+            <div className="timeline">
+              {[["phone","Call logged","Discussed appraisal gap; buyer comfortable up to $15k.","2h ago"],["sparkles","Mel summarized the inspection report","7 items flagged; 2 need seller response before Aug 6.","5h ago"],["file-text","Counteroffer uploaded","Purchase agreement v3 signed by both parties.","Yesterday"],["mail","Email sent","Shared closing timeline and wire instructions.","Mon"],["handshake","Offer accepted","$1,240,000 · 2.5% buyer-side commission.","Jul 22"]].map(([ic,h,b,tm],i)=>(
+                <div className="tl-item" key={i}><div className="h"><Icon name={ic} size={15} style={{color:"var(--muted-foreground)"}}/><b style={{fontWeight:600}}>{h}</b><span className="tm">{tm}</span></div><div className="b">{b}</div></div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="panel mod">
+            <div className="panel-h"><h3>Transaction</h3></div>
+            <div className="panel-b">
+              <div className="kv"><span className="l">Price</span><span className="rds-num">$1,240,000</span></div>
+              <div className="kv"><span className="l">Commission</span><span className="rds-num">$31,000</span></div>
+              <div className="kv"><span className="l">Close date</span><span>Aug 14, 2026</span></div>
+              <div className="kv"><span className="l">Days to close</span><span>18</span></div>
+              <div style={{marginTop:12}}><div className="sub" style={{marginBottom:6}}>Milestones · 4 of 7</div><Progress value={57}/></div>
+            </div>
+          </div>
+          <div className="mel-card">
+            <div className="mel-h"><img src="../../assets/mel-icon.svg"/><b>Mel suggests</b></div>
+            <p>The appraisal is due in 3 days. I can draft a check-in to Jordan's lender and prep the contingency-removal doc.</p>
+            <Button size="sm" block>Draft follow-up</Button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+const TITLES={dashboard:"Dashboard",transactions:"Transactions",clients:"Client · Jordan Nguyen",documents:"Documents",commissions:"Commissions",prospecting:"Prospecting",academy:"Academy"};
+function App(){
+  const [view,setView]=React.useState("dashboard");
+  let body;
+  if(view==="dashboard") body=<Dashboard/>;
+  else if(view==="transactions") body=<Transactions/>;
+  else if(view==="clients") body=<ClientProfile/>;
+  else body=<div className="panel" style={{padding:0}}><Empty icon={<Icon name="folder" size={24}/>} title={TITLES[view]+" coming up"} description="This surface is part of the Radius CRM kit. Wire it to your data to bring it to life."/></div>;
+  return (
+    <div className="app">
+      <Sidebar view={view} setView={setView}/>
+      <div className="main"><Topbar title={TITLES[view]}/><div className="content">{body}</div></div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

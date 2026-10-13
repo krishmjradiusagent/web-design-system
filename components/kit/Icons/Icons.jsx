@@ -1,0 +1,6 @@
+import React from "react";
+import { Icon } from "../../icons/Icon.jsx";
+/** Radius UI — kit family "Icons". Materialized 1:1 from the Figma file.  */
+export function Icons({ size = 20, color = "currentColor", className = "", ...rest }) {
+  return <Icon name="square" size={size} color={color} className={className} {...rest} />;
+}

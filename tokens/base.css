@@ -1,0 +1,31 @@
+/* Radius UI — base defaults
+   Quiet chrome, strong content. Body 14px Mona Sans, headings Hubot Sans. */
+:root {
+  color-scheme: light;
+  --font-body: var(--font-sans);
+  --font-heading: var(--font-display);
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+  background: var(--background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-variation-settings: "wdth" 100;
+}
+h1,h2,h3,h4,h5,h6 { text-wrap: balance; }
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Links — indigo is used with intent; links are foreground with subtle affordance.
+   Defined so user-added links never fall back to browser blue. */
+a { color: var(--foreground); text-decoration: none; text-underline-offset: 2px; }
+a:hover { text-decoration: underline; text-decoration-color: var(--muted-foreground); }
+
+/* Numbers for comparison: Mona Sans tabular figures (no mono family). */
+.rds-num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1, "cv01" 1; }
+
+::selection { background: color-mix(in srgb, var(--brand-indigo) 22%, transparent); }
